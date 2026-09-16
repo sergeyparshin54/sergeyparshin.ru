@@ -36,7 +36,7 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
   background:radial-gradient(circle at 50% 35%,rgba(77,227,196,.09),rgba(124,140,255,.05) 55%,transparent 75%);
   display:flex;align-items:center;justify-content:center;perspective:500px;cursor:grab;touch-action:none}
 .photo:active{cursor:grabbing}
-.photo .alien{width:clamp(72px,8vw,104px);height:auto;transform-style:preserve-3d;user-select:none;pointer-events:none;
+.photo .alien{width:clamp(46px,5vw,64px);height:auto;transform-style:preserve-3d;user-select:none;pointer-events:none;
   filter:drop-shadow(0 12px 24px rgba(57,211,83,.25))}
 .alien .eye{transform-box:fill-box;transform-origin:center;transition:transform .1s}
 .photo.wink .eye-r{transform:scaleY(.06)}
@@ -44,9 +44,9 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .photo .ring{position:absolute;inset:12%;border:1px dashed rgba(77,227,196,.25);border-radius:50%;pointer-events:none;animation:spin 24s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .photo .tag{position:absolute;left:10px;bottom:8px;font-size:9px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;pointer-events:none}
-.p-id h1{font-family:'Unbounded';font-weight:900;font-size:clamp(15px,1.7vw,22px);line-height:1.1;letter-spacing:.01em;white-space:nowrap}
+.p-id h1{font-family:'Unbounded';font-weight:900;font-size:clamp(15px,1.7vw,22px);line-height:1.1;letter-spacing:.01em;white-space:nowrap;transition:letter-spacing .35s,text-shadow .35s;cursor:default}
+.p-id h1:hover{letter-spacing:.06em;text-shadow:0 0 22px color-mix(in srgb,var(--acc) 45%,transparent)}
 .p-id h1 span{background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.p-id .sub{font-size:10px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
 .p-dir{grid-column:5/13;--c:var(--acc3);display:flex;flex-direction:column;justify-content:center}
 .p-soc{grid-column:1/13;--c:var(--acc2)}
 .p-contrib{grid-column:1/13;--c:var(--acc)}
@@ -83,7 +83,7 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .repo:hover{border-color:var(--acc2);transform:translateY(-3px);box-shadow:0 8px 20px rgba(124,140,255,.18)}
 .repo .rn{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--acc2)}
 .repo .rn svg{width:14px;height:14px;fill:var(--dim);flex:none}
-.repo .rd{margin:10px 0 13px;font-size:11px;line-height:1.42;color:var(--dim);font-weight:300}
+.repo .rd{margin:10px 0 16px;font-size:11px;line-height:1.32;color:var(--dim);font-weight:300}
 .repo .rm{display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
 .repo .rm .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
 .repo .rm svg{width:12px;height:12px;fill:var(--dim);vertical-align:-2px;margin-right:3px}
@@ -148,8 +148,7 @@ a.soc:hover svg{fill:var(--acc2)}
         </div>
         <div>
           <h1>SERGEY <span>PARSHIN</span></h1>
-          <div class="sub">Moscow · UTC+3</div>
-        </div>
+          </div>
       </div>
 
       <div class="panel p-dir">
