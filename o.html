@@ -31,12 +31,12 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .rig.docked .panel:hover{border-color:var(--c);box-shadow:0 0 26px color-mix(in srgb,var(--c) 22%,transparent);transform:translateY(-4px)}
 .panel .cap{font-size:10px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;margin-bottom:14px}
 /* ID-card panel: photo + name */
-.p-id{grid-column:1/5;--c:var(--acc);display:flex;flex-direction:column;gap:10px;justify-content:center}
-.photo{position:relative;aspect-ratio:1;width:58%;margin:0 auto;border-radius:14px;border:1px solid rgba(130,160,220,.2);overflow:hidden;
+.p-id{grid-column:1/4;--c:var(--acc);display:flex;flex-direction:column;gap:10px;justify-content:center}
+.photo{position:relative;aspect-ratio:1;width:82%;margin:0 auto;border-radius:14px;border:1px solid rgba(130,160,220,.2);overflow:hidden;
   background:radial-gradient(circle at 50% 35%,rgba(77,227,196,.09),rgba(124,140,255,.05) 55%,transparent 75%);
   display:flex;align-items:center;justify-content:center;perspective:500px;cursor:grab;touch-action:none}
 .photo:active{cursor:grabbing}
-.photo .alien{width:clamp(72px,8vw,104px);height:auto;transform-style:preserve-3d;user-select:none;pointer-events:none;
+.photo .alien{width:72%};height:auto;transform-style:preserve-3d;user-select:none;pointer-events:none;
   filter:drop-shadow(0 12px 24px rgba(57,211,83,.25))}
 .alien .eye{transform-box:fill-box;transform-origin:center;transition:transform .1s}
 .photo.wink .eye-r{transform:scaleY(.06)}
@@ -44,12 +44,10 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .photo .ring{position:absolute;inset:12%;border:1px dashed rgba(77,227,196,.25);border-radius:50%;pointer-events:none;animation:spin 24s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .photo .tag{position:absolute;left:10px;bottom:8px;font-size:9px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;pointer-events:none}
-.p-id h1{font-family:'Unbounded';font-weight:900;font-size:clamp(17px,2.05vw,25px);line-height:1.1;letter-spacing:0;white-space:nowrap;width:100%;transition:letter-spacing .35s,text-shadow .35s;cursor:default}
+.p-id h1{font-family:'Unbounded';font-weight:900;font-size:clamp(14px,1.55vw,19px);line-height:1.1;letter-spacing:0;white-space:nowrap;width:100%;transition:letter-spacing .35s,text-shadow .35s;cursor:default}
 .p-id h1:hover{letter-spacing:.06em;text-shadow:0 0 22px color-mix(in srgb,var(--acc) 45%,transparent)}
 .p-id h1 span{background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.p-dir{grid-column:1/13;--c:var(--acc3);display:flex;flex-direction:row;align-items:center;gap:26px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
-.p-dir .cap{margin:0;margin-right:auto}
-.p-soc{grid-column:5/13;--c:var(--acc2);display:flex;flex-direction:column;justify-content:center}
+.p-soc{grid-column:4/13;--c:var(--acc2);display:flex;flex-direction:column;justify-content:center}
 .p-soc .cap{margin-bottom:10px}
 .p-contrib{grid-column:1/13;--c:var(--acc)}
 .p-repos{grid-column:1/13;--c:var(--acc2)}
@@ -117,7 +115,7 @@ a.soc:hover svg{fill:var(--acc2)}
 .vars a.on{color:var(--acc);border-color:var(--acc)}
 @media (max-width:1100px){.dash{width:96vw}}
 @media (max-width:760px){
-  .p-id,.p-dir,.p-contrib,.p-soc,.p-repos{grid-column:1/13}
+  .p-id,.p-contrib,.p-soc,.p-repos{grid-column:1/13}
   .p-id{flex-direction:row;align-items:center}
   .p-id .photo{width:88px;flex:none;margin:0}
   .p-id .photo .tag{display:none}
@@ -148,7 +146,6 @@ a.soc:hover svg{fill:var(--acc2)}
             <ellipse cx="73" cy="54" rx="3" ry="4.5" fill="#3d5468" opacity=".8" transform="rotate(14 73 54)"/>
             <path d="M52 90 Q60 95 68 90" stroke="#4a5f58" stroke-width="2.5" fill="none" stroke-linecap="round"/>
           </svg>
-          <div class="tag">id · sp-01</div>
         </div>
         <div style="width:100%">
           <h1>SERGEY <span>PARSHIN</span></h1>
@@ -156,14 +153,8 @@ a.soc:hover svg{fill:var(--acc2)}
       </div>
 
       <div class="panel p-soc">
-        <div class="cap">Socials</div>
+        <div class="cap">Contacts & Socials</div>
         <div class="socgrid" id="socgrid"></div>
-      </div>
-
-      <div class="panel p-dir">
-        <div class="cap">Direct</div>
-        <a class="big-link" href="tel:+79930001122"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Phone<span class="v">+7 993 000-11-22</span></a>
-        <a class="big-link" href="mailto:info@sergeyparshin.ru"><svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>Email<span class="v">info@sergeyparshin.ru</span></a>
       </div>
 
       <div class="panel p-contrib">
@@ -220,6 +211,8 @@ a.soc:hover svg{fill:var(--acc2)}
 
 <script>
 const SOCS=[
+ {k:"phone",t:"+7 993 000-11-22",u:"tel:+79930001122"},
+ {k:"mail",t:"info@sergeyparshin.ru",u:"mailto:info@sergeyparshin.ru"},
  {k:"whatsapp",t:"WhatsApp",u:"https://wa.me/79930001122"},
  {k:"telegram",t:"Telegram",u:"https://t.me/buyholdsellrepeat"},
  {k:"instagram",t:"Instagram",u:"https://instagram.com/sergeyparshin.ru"},
@@ -228,6 +221,8 @@ const SOCS=[
  {k:"github",t:"GitHub",u:"https://github.com/sergeyparshin"}
 ];
 const ICONS={
+ phone:'<svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>',
+ mail:'<svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>',
  whatsapp:'<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.4-3c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.9.9-1.1 2.2-.2 3.9a11.6 11.6 0 0 0 4.5 4.2c1.7.8 2.4.9 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.5-.3z"/></svg>',
  telegram:'<svg viewBox="0 0 24 24"><path d="M21.9 4.6 19 19.3c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.1 2.1c-.3.3-.5.5-.9.5l.3-4.5 8.3-7.5c.4-.3-.1-.5-.6-.2L7.7 13.2 3.3 11.8c-1-.3-1-1 .2-1.4l17.2-6.6c.8-.3 1.4.2 1.2.8z"/></svg>',
  instagram:'<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8C2.4 4 4 2.4 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.2-9.6a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>',
@@ -238,7 +233,8 @@ const ICONS={
 const sg=document.getElementById('socgrid');
 SOCS.forEach(L=>{
   const a=document.createElement('a');a.className='soc';a.href=L.u;a.target='_blank';a.rel='noopener';
-  a.innerHTML=`${ICONS[L.k]}<span>${L.t}</span>`;sg.appendChild(a);
+  if(L.k==='phone'||L.k==='mail'){a.style.gridColumn='span 2';a.style.fontSize='12.5px'}
+  a.innerHTML=`${ICONS[L.k]}<span style="white-space:nowrap">${L.t}</span>`;sg.appendChild(a);
 });
 
 /* ===== morph engine: the rig IS the dashboard ===== */
