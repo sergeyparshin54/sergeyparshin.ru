@@ -32,11 +32,11 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .panel .cap{font-size:10px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;margin-bottom:14px}
 /* ID-card panel: photo + name */
 .p-id{grid-column:1/5;--c:var(--acc);display:flex;flex-direction:column;gap:14px}
-.photo{position:relative;aspect-ratio:1;border-radius:14px;border:1px solid rgba(130,160,220,.2);overflow:hidden;
+.photo{position:relative;aspect-ratio:1;width:72%;margin:0 auto;border-radius:14px;border:1px solid rgba(130,160,220,.2);overflow:hidden;
   background:radial-gradient(circle at 50% 35%,rgba(77,227,196,.09),rgba(124,140,255,.05) 55%,transparent 75%);
   display:flex;align-items:center;justify-content:center;perspective:500px;cursor:grab;touch-action:none}
 .photo:active{cursor:grabbing}
-.photo .alien{width:clamp(46px,5vw,64px);height:auto;transform-style:preserve-3d;user-select:none;pointer-events:none;
+.photo .alien{width:clamp(72px,8vw,104px);height:auto;transform-style:preserve-3d;user-select:none;pointer-events:none;
   filter:drop-shadow(0 12px 24px rgba(57,211,83,.25))}
 .alien .eye{transform-box:fill-box;transform-origin:center;transition:transform .1s}
 .photo.wink .eye-r{transform:scaleY(.06)}
@@ -83,7 +83,7 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .repo:hover{border-color:var(--acc2);transform:translateY(-3px);box-shadow:0 8px 20px rgba(124,140,255,.18)}
 .repo .rn{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--acc2)}
 .repo .rn svg{width:14px;height:14px;fill:var(--dim);flex:none}
-.repo .rd{margin:10px 0 16px;font-size:11px;line-height:1.32;color:var(--dim);font-weight:300}
+.repo .rd{margin:14px 0 20px;font-size:11px;line-height:1.32;color:var(--dim);font-weight:300}
 .repo .rm{display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
 .repo .rm .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
 .repo .rm svg{width:12px;height:12px;fill:var(--dim);vertical-align:-2px;margin-right:3px}
@@ -117,7 +117,7 @@ a.soc:hover svg{fill:var(--acc2)}
 @media (max-width:760px){
   .p-id,.p-dir,.p-contrib,.p-soc,.p-repos{grid-column:1/13}
   .p-id{flex-direction:row;align-items:center}
-  .p-id .photo{width:38%;flex:none}
+  .p-id .photo{width:30%;flex:none;margin:0}
   .big-link .v{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
