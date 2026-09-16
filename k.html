@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Сергей Паршин — CINEMATIC</title>
+<meta name="description" content="Сергей Паршин — AI-специалист. Контакты и соцсети.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;700;900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04050c;--ink:#eaf0ff;--dim:#5e6a86;--acc:#7cf5ff;--acc2:#c86bff;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospace;-webkit-font-smoothing:antialiased}
+::selection{background:var(--acc);color:#03222a}
+#stars{position:fixed;inset:0;z-index:0}
+.scene{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column;pointer-events:none;will-change:transform,opacity}
+
+/* SCENE 1 — holo card */
+.card{width:min(480px,86vw);aspect-ratio:1.586;border-radius:16px;position:relative;
+  background:linear-gradient(135deg,#101021,#1a1a30 50%,#0b0b18);
+  border:1px solid rgba(140,170,255,.3);
+  box-shadow:0 40px 90px rgba(0,0,0,.7),0 0 60px rgba(124,245,255,.08),inset 0 1px 0 rgba(255,255,255,.1);
+  transform-style:preserve-3d}
+.card::before{content:"";position:absolute;inset:0;border-radius:16px;
+  background:linear-gradient(115deg,transparent 25%,rgba(124,245,255,.3) 42%,rgba(255,120,220,.3) 55%,rgba(140,255,180,.25) 66%,transparent 82%);
+  background-size:280% 280%;background-position:calc(var(--gx,50)*1%) calc(var(--gy,50)*1%);
+  mix-blend-mode:color-dodge}
+.card .inner{position:absolute;inset:0;padding:clamp(16px,4.5%,28px);display:flex;flex-direction:column;transform:translateZ(30px)}
+.chip{width:42px;height:31px;border-radius:6px;background:linear-gradient(135deg,#d9c98a,#a88d4a 55%,#e8db9f);box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.card .brand{margin-left:auto;font-size:9px;letter-spacing:.4em;color:var(--dim)}
+.card .brand b{display:block;color:var(--acc);font-size:10px}
+.card .nm{margin-top:auto;font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(20px,5vw,32px);
+  background:linear-gradient(100deg,#fff,#9fdcff 60%,#e0b3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card .sub{font-size:10px;letter-spacing:.4em;color:var(--dim);margin-top:8px;text-transform:uppercase}
+.card .num{margin-top:12px;font-size:clamp(11px,2.2vw,14px);letter-spacing:.3em;color:#c8d4f0;font-weight:300}
+.s1cap{position:absolute;bottom:9vh;font-size:10px;letter-spacing:.4em;color:var(--dim);text-transform:uppercase;animation:bob 2.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+
+/* SCENE 2 — warp text */
+.warp-t{font-family:'Unbounded',sans-serif;font-weight:700;font-size:clamp(16px,3.4vw,30px);letter-spacing:.3em;color:var(--acc);
+  text-shadow:0 0 30px rgba(124,245,255,.6);text-align:center;padding:0 20px}
+
+/* SCENE 3 — kinetic type */
+#s3{overflow:hidden}
+.kline{white-space:nowrap;font-family:'Unbounded',sans-serif;font-weight:900;line-height:.95;will-change:transform}
+.k1{font-size:clamp(60px,14vw,170px);color:transparent;-webkit-text-stroke:1.5px rgba(234,240,255,.75)}
+.k2{font-size:clamp(60px,14vw,170px);background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.k3{margin-top:26px;font-size:clamp(11px,1.8vw,15px);letter-spacing:.5em;color:var(--dim);text-transform:uppercase;font-family:'JetBrains Mono',monospace;font-weight:300}
+
+/* SCENE 4 — contacts */
+#s4 .wrap4{text-align:center;pointer-events:auto;max-width:860px;padding:0 18px}
+.f1{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(26px,5.5vw,54px)}
+.f1 span{color:var(--acc)}
+.f2{margin:14px 0 34px;font-size:clamp(11px,1.6vw,13px);color:var(--dim);letter-spacing:.2em}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+a.chip4{display:inline-flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none;font-size:12.5px;
+  padding:12px 20px;border-radius:99px;border:1px solid rgba(140,170,255,.3);background:rgba(10,12,26,.65);backdrop-filter:blur(8px);
+  transition:.25s;opacity:0;transform:translateY(26px) scale(.9)}
+a.chip4 svg{width:15px;height:15px;fill:var(--dim);transition:.25s}
+a.chip4:hover{border-color:var(--acc);color:var(--acc);box-shadow:0 0 22px rgba(124,245,255,.3);transform:translateY(-3px)!important}
+a.chip4:hover svg{fill:var(--acc)}
+a.chip4.on{opacity:1;transform:none}
+
+/* chrome */
+.dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:12px}
+.dots button{width:9px;height:9px;border-radius:50%;border:1px solid var(--dim);background:none;cursor:pointer;padding:0;transition:.3s}
+.dots button.on{background:var(--acc);border-color:var(--acc);box-shadow:0 0 10px var(--acc);transform:scale(1.3)}
+.langs{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:4px}
+.langs button{background:rgba(4,5,12,.7);border:1px solid rgba(140,170,255,.3);color:var(--dim);font:inherit;font-size:10px;letter-spacing:.2em;padding:5px 12px;cursor:pointer;border-radius:99px}
+.langs button.on{color:#03222a;background:var(--acc);border-color:var(--acc)}
+.prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc2));z-index:20;width:0}
+.stamp{position:fixed;top:22px;left:22px;z-index:20;font-size:10px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+.vars{position:fixed;right:10px;bottom:10px;z-index:20;display:flex;flex-wrap:wrap;gap:4px;font-size:10px;max-width:55vw;justify-content:flex-end}
+.vars a{color:var(--dim);text-decoration:none;border:1px solid rgba(140,170,255,.3);padding:4px 9px;border-radius:99px;background:rgba(4,5,12,.8)}
+.vars a.on{color:var(--acc);border-color:var(--acc)}
+@media (max-width:560px){.dots{right:12px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="prog" id="prog"></div>
+<div class="stamp">SP — cinematic</div>
+<div class="langs"><button id="bRu">RU</button><button id="bEn">EN</button></div>
+<div class="dots" id="dots"></div>
+
+<section class="scene" id="s1">
+  <div class="card" id="card">
+    <div class="inner">
+      <div style="display:flex"><div class="chip"></div><div class="brand"><b>NEURAL&nbsp;ID</b><span data-i18n="brand">карта доступа</span></div></div>
+      <div class="nm" data-i18n="n1">СЕРГЕЙ ПАРШИН</div>
+      <div class="sub">AI Specialist · Deep Learning</div>
+      <div class="num">5300&nbsp;9000&nbsp;1337&nbsp;2026</div>
+    </div>
+  </div>
+  <div class="s1cap" data-i18n="cap1">крути колесико — ныряем внутрь</div>
+</section>
+
+<section class="scene" id="s2"><div class="warp-t" id="warpt"></div></section>
+
+<section class="scene" id="s3">
+  <div><div class="kline k1" id="k1">СЕРГЕЙ</div>
+  <div class="kline k2" id="k2">ПАРШИН</div>
+  <div class="kline k3" id="k3" data-i18n="k3">строю нейросети · ломаю шаблоны</div></div>
+</section>
+
+<section class="scene" id="s4">
+  <div class="wrap4">
+    <div class="f1" data-i18n="f1">Давай <span>свяжемся</span></div>
+    <div class="f2" data-i18n="f2">выбирай любой канал — отвечаю быстро</div>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+
+<script>
+const T={
+ ru:{brand:"карта доступа",n1:"СЕРГЕЙ ПАРШИН",cap1:"крути колесико — ныряем внутрь",
+     warp:"ИНИЦИАЛИЗАЦИЯ КОНТАКТА…",k1:"СЕРГЕЙ",k2:"ПАРШИН",k3:"строю нейросети · ломаю шаблоны",
+     f1:'Давай <span>свяжемся</span>',f2:"выбирай любой канал — отвечаю быстро",
+     labels:{phone:"Телефон",mail:"Почта",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}},
+ en:{brand:"access card",n1:"SERGEY PARSHIN",cap1:"scroll to dive inside",
+     warp:"ESTABLISHING CONTACT…",k1:"SERGEY",k2:"PARSHIN",k3:"building neural nets · breaking templates",
+     f1:'Let\'s <span>connect</span>',f2:"pick any channel — I reply fast",
+     labels:{phone:"Phone",mail:"Email",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}}
+};
+const LINKS=[
+ {k:"phone",u:"tel:+79930001122"},{k:"mail",u:"mailto:info@sergeyparshin.ru"},
+ {k:"whatsapp",u:"https://wa.me/79930001122"},{k:"telegram",u:"https://t.me/buyholdsellrepeat"},
+ {k:"instagram",u:"https://instagram.com/sergeyparshin.ru"},{k:"x",u:"https://x.com/sergeyparshin"},
+ {k:"facebook",u:"https://facebook.com/sergeyparshin.ru"},{k:"github",u:"https://github.com/sergeyparshin"},
+ {k:"steam",u:"https://steamcommunity.com/id/sergeyparshin"}
+];
+const ICONS={
+ phone:'<svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>',
+ mail:'<svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+ whatsapp:'<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.4-3c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.9.9-1.1 2.2-.2 3.9a11.6 11.6 0 0 0 4.5 4.2c1.7.8 2.4.9 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.5-.3z"/></svg>',
+ telegram:'<svg viewBox="0 0 24 24"><path d="M21.9 4.6 19 19.3c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.1 2.1c-.3.3-.5.5-.9.5l.3-4.5 8.3-7.5c.4-.3-.1-.5-.6-.2L7.7 13.2 3.3 11.8c-1-.3-1-1 .2-1.4l17.2-6.6c.8-.3 1.4.2 1.2.8z"/></svg>',
+ instagram:'<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8C2.4 4 4 2.4 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.2-9.6a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>',
+ x:'<svg viewBox="0 0 24 24"><path d="M18.9 2H22l-6.8 7.8L23.3 22h-6.3l-4.9-6.4L6.5 22H3.4l7.3-8.3L1 2h6.5l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>',
+ facebook:'<svg viewBox="0 0 24 24"><path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.6 1.6-1.6h1.7V3.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.3H7.3v3.2h2.8V21h3.4z"/></svg>',
+ github:'<svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C16.3 4.8 17.3 5 17.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>',
+ steam:'<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 9.5l5.4 2.2a2.8 2.8 0 0 1 1.6-.5l2.4-3.5v-.1a3.8 3.8 0 1 1 3.8 3.8h-.1l-3.4 2.5c0 .1.1.3.1.4a2.9 2.9 0 0 1-5.7.7l-3.9-1.6A10 10 0 1 0 12 2zM7.5 18.6l1.2.5a2.1 2.1 0 1 0 1.1-2.8l1.3.6a1.6 1.6 0 1 1-1.6 1.6l-2 .1zm8-6.6a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0zm-4.2 0a1.7 1.7 0 1 1 3.4 0 1.7 1.7 0 0 1-3.4 0z"/></svg>'
+};
+let lang=localStorage.getItem('sp-lang')||(((navigator.language||'ru').startsWith('ru'))?'ru':'en');
+function render(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=T[lang][el.dataset.i18n]);
+  document.getElementById('k1').textContent=T[lang].k1;
+  document.getElementById('k2').textContent=T[lang].k2;
+  document.getElementById('bRu').classList.toggle('on',lang==='ru');
+  document.getElementById('bEn').classList.toggle('on',lang==='en');
+  const c=document.getElementById('chips');c.innerHTML='';
+  LINKS.forEach((L,i)=>{
+    const a=document.createElement('a');a.className='chip4';a.href=L.u; 
+    if(!L.u.startsWith('tel:')&&!L.u.startsWith('mailto:')){a.target='_blank';a.rel='noopener';}
+    a.innerHTML=`${ICONS[L.k]}<span>${T[lang].labels[L.k]}</span>`;
+    a.style.transitionDelay=(i*60)+'ms';
+    c.appendChild(a);
+  });
+}
+document.getElementById('bRu').onclick=()=>{lang='ru';localStorage.setItem('sp-lang',lang);render();};
+document.getElementById('bEn').onclick=()=>{lang='en';localStorage.setItem('sp-lang',lang);render();};
+render();
+
+/* ============ cinematic scroll engine ============ */
+const N=4; // scenes
+let target=0, p=0;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+addEventListener('wheel',e=>{e.preventDefault();target=clamp(target+e.deltaY/900,0,N-1);},{passive:false});
+let ts=null;
+addEventListener('touchstart',e=>{ts=e.touches[0].clientY;},{passive:true});
+addEventListener('touchmove',e=>{
+  if(ts==null)return;
+  const dy=ts-e.touches[0].clientY;ts=e.touches[0].clientY;
+  target=clamp(target+dy/220,0,N-1);
+  e.preventDefault();
+},{passive:false});
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' ')target=clamp(Math.round(target)+1,0,N-1);
+  if(e.key==='ArrowUp'||e.key==='PageUp')target=clamp(Math.round(target)-1,0,N-1);
+});
+
+/* dots */
+const dots=document.getElementById('dots');
+for(let i=0;i<N;i++){const b=document.createElement('button');b.onclick=()=>target=i;dots.appendChild(b);}
+
+/* starfield with warp speed */
+const cv=document.getElementById('stars'),cx=cv.getContext('2d');
+let W,H,ST=[];
+function rs(){W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio;
+  cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';
+  ST=Array.from({length:260},()=>({x:(Math.random()-.5)*W,y:(Math.random()-.5)*H,z:Math.random()*W}));}
+addEventListener('resize',rs);rs();
+
+/* warp text scramble */
+const GLY='!<>-_/[]{}=+*^?#01';
+let warpShown='';
+function scrambleTo(el,txt){
+  if(warpShown===txt)return;warpShown=txt;let f=0;clearInterval(el._t);
+  el._t=setInterval(()=>{
+    el.textContent=[...txt].map((c,i)=>i<f?c:(c===' '?' ':GLY[Math.random()*GLY.length|0])).join('');
+    if(f++>txt.length)clearInterval(el._t);
+  },34);
+}
+
+const card=document.getElementById('card');
+const s=[1,2,3,4].map(i=>document.getElementById('s'+i));
+let mx=0,my=0;
+addEventListener('pointermove',e=>{mx=e.clientX/innerWidth*2-1;my=e.clientY/innerHeight*2-1;
+  card.style.setProperty('--gx',(mx*50+50));card.style.setProperty('--gy',(my*50+50));});
+
+function frame(t){
+  p+= (target-p)*.065;
+  document.getElementById('prog').style.width=(p/(N-1)*100)+'%';
+  [...dots.children].forEach((d,i)=>d.classList.toggle('on',Math.round(p)===i));
+
+  /* --- scene 1: card, dive-through at p→1 --- */
+  const p1=clamp(p,0,1);
+  const dive=ease(clamp((p-0.55)/0.45,0,1));
+  s[0].style.opacity=1-dive*1.4;
+  s[0].style.pointerEvents=p<0.6?'auto':'none';
+  const float=Math.sin(t*.0012)*6;
+  card.style.transform=`rotateX(${my*-10+float*.4}deg) rotateY(${mx*12}deg) translateY(${float}px) scale(${1+dive*7})`;
+  s[0].style.filter=dive>0?`blur(${dive*10}px)`:'none';
+
+  /* --- scene 2: warp --- */
+  const wIn=ease(clamp((p-0.8)/0.25,0,1)), wOut=1-ease(clamp((p-1.75)/0.3,0,1));
+  const wOp=Math.min(wIn,wOut);
+  s[1].style.opacity=wOp;
+  s[1].style.transform=`scale(${0.7+wIn*0.35})`;
+  if(wOp>0.15)scrambleTo(document.getElementById('warpt'),T[lang].warp);
+
+  /* --- scene 3: kinetic type scrub --- */
+  const kIn=clamp((p-1.7)/0.4,0,1), kOut=1-clamp((p-2.75)/0.35,0,1);
+  s[2].style.opacity=Math.min(kIn,kOut)*1.2;
+  const scrub=clamp((p-2)/1,0,1);
+  document.getElementById('k1').style.transform=`translateX(${(0.5-scrub)*60}vw)`;
+  document.getElementById('k2').style.transform=`translateX(${(scrub-0.5)*60}vw)`;
+  document.getElementById('k3').style.transform=`translateX(${(0.5-scrub)*22}vw)`;
+
+  /* --- scene 4: contacts --- */
+  const cIn=ease(clamp((p-2.8)/0.35,0,1));
+  s[3].style.opacity=cIn;
+  s[3].style.pointerEvents=cIn>0.7?'auto':'none';
+  s[3].style.transform=`scale(${0.92+cIn*0.08}) translateY(${(1-cIn)*30}px)`;
+  const chips=document.querySelectorAll('.chip4');
+  chips.forEach((c,i)=>c.classList.toggle('on', p>2.95+i*0.02));
+
+  /* --- starfield: speed follows dive/warp --- */
+  const warp=0.4+dive*26+ (p>0.8&&p<2? (1-Math.abs(p-1.4)/0.6)*30 : 2);
+  cx.fillStyle=`rgba(4,5,12,${warp>10?0.28:0.5})`;cx.fillRect(0,0,W,H);
+  for(const st of ST){
+    st.z-=warp*devicePixelRatio;
+    if(st.z<=1){st.z=W;st.x=(Math.random()-.5)*W;st.y=(Math.random()-.5)*H;}
+    const k=220*devicePixelRatio/st.z;
+    const x=W/2+st.x*k, y=H/2+st.y*k;
+    const k2=220*devicePixelRatio/(st.z+warp*devicePixelRatio*6);
+    const x2=W/2+st.x*k2, y2=H/2+st.y*k2;
+    const a=clamp(1-st.z/W,0.08,1);
+    cx.strokeStyle=`rgba(${warp>12?'140,245,255':'200,215,255'},${a})`;
+    cx.lineWidth=devicePixelRatio*(warp>12?1.4:0.8);
+    cx.beginPath();cx.moveTo(x2,y2);cx.lineTo(x,y);cx.stroke();
+  }
+  requestAnimationFrame(frame);
+}
+if(reduced){target=N-1;p=N-1;}
+requestAnimationFrame(frame);
+</script>
+<div class="vars" id="vars"></div>
+<script src="vars.js"></script>
+</body>
+</html>
