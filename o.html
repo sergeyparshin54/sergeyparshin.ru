@@ -16,9 +16,9 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 ::selection{background:var(--acc);color:#02211a}
 
 .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;perspective:1600px;perspective-origin:50% 45%}
-.rig{position:relative;transform-style:preserve-3d;cursor:grab;will-change:transform;touch-action:none}
+.rig{user-select:none;-webkit-user-select:none;position:relative;transform-style:preserve-3d;cursor:grab;will-change:transform;touch-action:none}
 .rig:active{cursor:grabbing}
-.rig.docked{cursor:default}
+.rig.docked{cursor:default;user-select:text;-webkit-user-select:text}
 
 /* the dashboard itself — lives inside the rig from the very start */
 .dash{width:880px;border-radius:22px;padding:22px;display:grid;gap:14px;grid-template-columns:repeat(12,1fr);
@@ -53,6 +53,9 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .p-loc{grid-column:1/13;--c:var(--acc3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
   font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
 .p-loc b{color:var(--acc3);font-weight:500}
+a.site-link{color:var(--dim);text-decoration:none;letter-spacing:.18em;text-transform:uppercase;font-size:inherit;transition:.25s;pointer-events:none}
+.rig.docked a.site-link{pointer-events:auto}
+a.site-link:hover{color:var(--acc);text-shadow:0 0 14px color-mix(in srgb,var(--acc) 55%,transparent)}
 
 /* github-style contribution graph */
 .cwrap{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start}
@@ -179,7 +182,7 @@ a.soc:hover svg{fill:var(--acc2)}
       <div class="panel p-loc">
         <span>Moscow · <b>UTC+3</b></span>
         <span><b>55.75°N 37.61°E</b></span>
-        <span>sergeyparshin.ru</span>
+        <a class="site-link" href="https://sergeyparshin.ru" target="_blank" rel="noopener">sergeyparshin.ru</a>
       </div>
     </div>
   </div>
@@ -281,6 +284,7 @@ addEventListener('resize',measure);
 
 rig.addEventListener('pointerdown',e=>{
   if(p>0.05)return;
+  e.preventDefault();
   dragging=true;dx=e.clientX;dy=e.clientY;rig.setPointerCapture(e.pointerId);
 });
 addEventListener('pointermove',e=>{
