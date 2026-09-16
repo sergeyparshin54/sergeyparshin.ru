@@ -76,14 +76,14 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 
 /* github-style pinned repos */
 .repos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.repo{display:block;text-decoration:none;color:var(--ink);border:1px solid rgba(130,160,220,.16);border-radius:12px;
+.repo{display:flex;flex-direction:column;text-decoration:none;color:var(--ink);border:1px solid rgba(130,160,220,.16);border-radius:12px;
   padding:16px 16px 22px;background:rgba(255,255,255,.02);transition:.25s;pointer-events:none}
 .rig.docked .repo{pointer-events:auto}
 .repo:hover{border-color:var(--acc2);transform:translateY(-3px);box-shadow:0 8px 20px rgba(124,140,255,.18)}
 .repo .rn{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--acc2)}
 .repo .rn svg{width:14px;height:14px;fill:var(--dim);flex:none}
 .repo .rd{margin:18px 0 0;font-size:11px;line-height:1.32;color:var(--dim);font-weight:300}
-.repo .rm{margin-top:34px;display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
+.repo .rm{margin-top:auto;padding-top:16px;display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
 .repo .rm .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
 .repo .rm svg{width:12px;height:12px;fill:var(--dim);vertical-align:-2px;margin-right:3px}
 
