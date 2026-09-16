@@ -36,13 +36,16 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
   background:radial-gradient(circle at 50% 35%,rgba(77,227,196,.09),rgba(124,140,255,.05) 55%,transparent 75%);
   display:flex;align-items:center;justify-content:center;perspective:500px;cursor:grab;touch-action:none}
 .photo:active{cursor:grabbing}
-.photo .alien{font-size:clamp(72px,9vw,110px);line-height:1;transform-style:preserve-3d;user-select:none;pointer-events:none;
+.photo .alien{width:clamp(72px,8vw,104px);height:auto;transform-style:preserve-3d;user-select:none;pointer-events:none;
   filter:drop-shadow(0 12px 24px rgba(57,211,83,.25))}
+.alien .eye{transform-box:fill-box;transform-origin:center;transition:transform .1s}
+.photo.wink .eye-r{transform:scaleY(.06)}
+.photo.blink .eye{transform:scaleY(.06)}
 .photo .ring{position:absolute;inset:12%;border:1px dashed rgba(77,227,196,.25);border-radius:50%;pointer-events:none;animation:spin 24s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .photo .tag{position:absolute;left:10px;bottom:8px;font-size:9px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;pointer-events:none}
-.p-id h1{font-family:'Unbounded';font-weight:900;font-size:clamp(22px,2.6vw,32px);line-height:1.08;letter-spacing:.01em}
-.p-id h1 span{display:block;background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.p-id h1{font-family:'Unbounded';font-weight:900;font-size:clamp(15px,1.7vw,22px);line-height:1.1;letter-spacing:.01em;white-space:nowrap}
+.p-id h1 span{background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .p-id .sub{font-size:10px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
 .p-dir{grid-column:5/13;--c:var(--acc3);display:flex;flex-direction:column;justify-content:center}
 .p-soc{grid-column:1/13;--c:var(--acc2)}
@@ -80,7 +83,7 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .repo:hover{border-color:var(--acc2);transform:translateY(-3px);box-shadow:0 8px 20px rgba(124,140,255,.18)}
 .repo .rn{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--acc2)}
 .repo .rn svg{width:14px;height:14px;fill:var(--dim);flex:none}
-.repo .rd{margin:7px 0 10px;font-size:11px;line-height:1.55;color:var(--dim);font-weight:300}
+.repo .rd{margin:10px 0 13px;font-size:11px;line-height:1.42;color:var(--dim);font-weight:300}
 .repo .rm{display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
 .repo .rm .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
 .repo .rm svg{width:12px;height:12px;fill:var(--dim);vertical-align:-2px;margin-right:3px}
@@ -129,7 +132,18 @@ a.soc:hover svg{fill:var(--acc2)}
       <div class="panel p-id">
         <div class="photo" id="photo">
           <div class="ring"></div>
-          <div class="alien" id="alien">👽</div>
+          <svg class="alien" id="alien" viewBox="0 0 120 120">
+            <defs><radialGradient id="ag" cx="50%" cy="35%" r="80%">
+              <stop offset="0%" stop-color="#e8f4ee"/><stop offset="55%" stop-color="#b9cfc4"/><stop offset="100%" stop-color="#7d948a"/>
+            </radialGradient></defs>
+            <ellipse cx="60" cy="64" rx="37" ry="45" fill="url(#ag)"/>
+            <ellipse cx="60" cy="105" rx="14" ry="8" fill="url(#ag)" opacity=".9"/>
+            <g transform="rotate(-14 44 60)"><ellipse class="eye eye-l" cx="44" cy="60" rx="10.5" ry="15" fill="#16202c"/></g>
+            <g transform="rotate(14 76 60)"><ellipse class="eye eye-r" cx="76" cy="60" rx="10.5" ry="15" fill="#16202c"/></g>
+            <ellipse cx="41" cy="54" rx="3" ry="4.5" fill="#3d5468" opacity=".8" transform="rotate(-14 41 54)"/>
+            <ellipse cx="73" cy="54" rx="3" ry="4.5" fill="#3d5468" opacity=".8" transform="rotate(14 73 54)"/>
+            <path d="M52 90 Q60 95 68 90" stroke="#4a5f58" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
           <div class="tag">id · sp-01</div>
         </div>
         <div>
@@ -245,30 +259,44 @@ function measure(){
 }
 addEventListener('resize',measure);
 
-/* draggable alien avatar — spins in 3D with inertia, independent of the rig */
+/* draggable alien avatar — gentle tilt with spring-back, wink on hover, idle blinks */
 (function(){
   const ph=document.getElementById('photo'),al=document.getElementById('alien');
   if(!ph||!al)return;
-  let ax=-8,ay=18,vx=0,vy=0,adrag=false,lx=0,ly=0;
+  const LIM=24; // max tilt degrees
+  let ax=0,ay=0,vx=0,vy=0,adrag=false,lx=0,ly=0;
   ph.addEventListener('pointerdown',e=>{
     e.stopPropagation();e.preventDefault();
     adrag=true;lx=e.clientX;ly=e.clientY;ph.setPointerCapture(e.pointerId);
   });
   addEventListener('pointermove',e=>{
     if(!adrag)return;
-    vy=(e.clientX-lx)*.45;vx=-(e.clientY-ly)*.45;
-    ay+=vy;ax=Math.max(-70,Math.min(70,ax+vx));
+    vy=(e.clientX-lx)*.18;vx=-(e.clientY-ly)*.18;
+    ay=Math.max(-LIM,Math.min(LIM,ay+vy));
+    ax=Math.max(-LIM,Math.min(LIM,ax+vx));
     lx=e.clientX;ly=e.clientY;
   });
   addEventListener('pointerup',()=>adrag=false);
-  (function spin(){
-    if(!adrag){
-      ax+=vx;ay+=vy;vx*=.94;vy*=.94;ax*=.985;
-      ay+=.12; // idle slow spin
+  (function tick(){
+    if(!adrag){ // spring back to rest
+      vx+=(0-ax)*.045;vy+=(0-ay)*.045;vx*=.86;vy*=.86;
+      ax=Math.max(-LIM,Math.min(LIM,ax+vx));
+      ay=Math.max(-LIM,Math.min(LIM,ay+vy));
     }
     al.style.transform=`rotateX(${ax}deg) rotateY(${ay}deg)`;
-    requestAnimationFrame(spin);
+    requestAnimationFrame(tick);
   })();
+  /* wink when hovered (memoji-style), blink every few seconds */
+  ph.addEventListener('mouseenter',()=>{
+    ph.classList.remove('wink');void ph.offsetWidth;ph.classList.add('wink');
+    setTimeout(()=>ph.classList.remove('wink'),420);
+  });
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    setInterval(()=>{
+      if(adrag)return;
+      ph.classList.add('blink');setTimeout(()=>ph.classList.remove('blink'),220);
+    },3600);
+  }
 })();
 
 rig.addEventListener('pointerdown',e=>{
