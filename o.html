@@ -13,9 +13,16 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
 body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);color:var(--ink);font-family:'JetBrains Mono',monospace;-webkit-font-smoothing:antialiased}
+/* ambient light that follows the model tilt */
+#glow{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(46% 38% at calc(50% + var(--lx,0px)) calc(34% + var(--ly,0px)),rgba(96,140,255,.13),transparent 70%),
+    radial-gradient(30% 26% at calc(50% + var(--lx,0px)*.6) calc(30% + var(--ly,0px)*.6),color-mix(in srgb,var(--acc) 9%,transparent),transparent 70%),
+    radial-gradient(70% 55% at 50% 115%,rgba(96,140,255,.06),transparent 70%);
+  transition:opacity .6s}
 ::selection{background:var(--acc);color:#02211a}
 
-.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;perspective:1600px;perspective-origin:50% 45%}
+.stage{position:fixed;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;perspective:1600px;perspective-origin:50% 45%}
 .rig{user-select:none;-webkit-user-select:none;position:relative;transform-style:preserve-3d;cursor:grab;will-change:transform;touch-action:none}
 .rig:active{cursor:grabbing}
 .rig.docked{cursor:default;user-select:text;-webkit-user-select:text}
@@ -128,6 +135,7 @@ a.soc:hover svg{fill:var(--acc2)}
 </style>
 </head>
 <body>
+<div id="glow"></div>
 <div class="prog" id="prog"></div>
 
 <div class="stage">
@@ -325,6 +333,12 @@ function frame(t){
 
   const d=ease(clamp(p,0,1));
   if(!dragging&&p<0.02&&!reduced){ry+=((Math.sin(t*.0004)*14)-ry)*.012;rx+=((-14)-rx)*.012;}
+  /* ambient light follows the tilt */
+  const glow=document.getElementById('glow');
+  const curRxL=rx*(1-d), curRyL=ry*(1-d);
+  glow.style.setProperty('--lx',(curRyL*4.2)+'px');
+  glow.style.setProperty('--ly',(curRxL*3.2)+'px');
+  glow.style.opacity=1-0.55*d;
   if(p>0.97){
     rig.style.transform='none'; // docked: render 1:1, no rasterization blur
   }else{
