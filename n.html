@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Сергей Паршин</title>
+<meta name="description" content="Сергей Паршин — AI-специалист. Контакты и соцсети.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;700;900&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04060c;--ink:#e8efff;--dim:#5d6880;--acc:#4de3c4;--acc2:#7c8cff;--acc3:#ffb84d;--acc4:#ff6b9d;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);color:var(--ink);font-family:'JetBrains Mono',monospace;-webkit-font-smoothing:antialiased}
+::selection{background:var(--acc);color:#02211a}
+
+/* ============ SCENE 1: 3D dashboard ============ */
+.scene1{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;
+  perspective:1500px;perspective-origin:50% 45%}
+.rig{width:min(620px,90vw);aspect-ratio:1.55;position:relative;transform-style:preserve-3d;cursor:grab;will-change:transform}
+.rig:active{cursor:grabbing}
+.plate{position:absolute;inset:0;border-radius:22px;transform-style:preserve-3d;
+  background:linear-gradient(150deg,#0c1122,#070b18 60%,#0a0e1e);
+  border:1px solid rgba(130,160,220,.28);
+  box-shadow:0 50px 100px rgba(0,0,0,.65),0 0 80px rgba(77,227,196,.06),inset 0 1px 0 rgba(255,255,255,.07)}
+.plate .frame{position:absolute;inset:0;padding:18px;display:grid;gap:12px;
+  grid-template-columns:1.2fr 1fr 1fr;grid-template-rows:auto 1fr 1fr;transform-style:preserve-3d}
+.wdg{--c:var(--acc);position:relative;border-radius:12px;background:rgba(255,255,255,.025);
+  border:1px solid rgba(130,160,220,.18);padding:12px;overflow:hidden;
+  transform:translateZ(var(--z,14px));transition:border-color .25s,box-shadow .25s,transform .25s}
+.wdg:hover{border-color:var(--c);box-shadow:0 0 22px color-mix(in srgb,var(--c) 35%,transparent),inset 0 0 18px color-mix(in srgb,var(--c) 10%,transparent);transform:translateZ(calc(var(--z,14px) + 14px))}
+.wdg .t{font-size:9px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase;margin-bottom:8px;transition:color .25s}
+.wdg:hover .t{color:var(--c)}
+.w-a{grid-column:1/2;grid-row:1/3;--c:var(--acc)}
+.w-b{--c:var(--acc2)}
+.w-c{--c:var(--acc3)}
+.w-d{grid-column:2/4;--c:var(--acc4)}
+.w-e{--c:var(--acc)}
+.w-f{--c:var(--acc2)}
+.wdg svg{width:100%;height:calc(100% - 20px);display:block}
+.kpi{display:flex;align-items:baseline;gap:6px}
+.kpi b{font-size:26px;font-weight:700;color:var(--ink)}
+.kpi span{font-size:10px;color:var(--acc)}
+.donutwrap{display:flex;align-items:center;justify-content:center;height:calc(100% - 20px)}
+.bars{display:flex;align-items:flex-end;gap:7px;height:calc(100% - 20px);padding-top:6px}
+.bars i{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--acc3),rgba(255,184,77,.15));animation:bar 2.6s ease-in-out infinite}
+.bars i:nth-child(2n){animation-delay:.4s}.bars i:nth-child(3n){animation-delay:.9s}
+@keyframes bar{50%{transform:scaleY(.72)}}
+.bars{transform-origin:bottom}
+.txt i{display:block;height:6px;border-radius:3px;background:rgba(130,160,220,.25);margin:9px 0}
+.txt i:nth-child(1){width:88%}.txt i:nth-child(2){width:64%;background:rgba(255,107,157,.4)}.txt i:nth-child(3){width:76%}
+.tick{display:flex;align-items:center;gap:10px;height:calc(100% - 20px);overflow:hidden;white-space:nowrap}
+.tick span{display:inline-block;animation:tick 9s linear infinite;font-size:11px;color:var(--acc2)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+.hint1{position:fixed;bottom:7vh;left:0;right:0;z-index:5;text-align:center;font-size:10.5px;letter-spacing:.32em;color:var(--dim);text-transform:uppercase}
+.hint1 b{color:var(--acc);font-weight:500}
+
+/* ============ SCENE 2: fullscreen dashboard ============ */
+.scene2{position:fixed;inset:0;z-index:3;opacity:0;pointer-events:none;
+  background:linear-gradient(160deg,#060a14,#04060c);
+  display:flex;align-items:center;justify-content:center;transition:opacity .1s linear}
+.scene2.on{pointer-events:auto}
+.dash{width:min(1060px,94vw);max-height:100svh;overflow:auto;padding:clamp(14px,3vh,34px);
+  display:grid;gap:clamp(10px,1.6vh,16px);grid-template-columns:repeat(12,1fr);scrollbar-width:none}
+.dash::-webkit-scrollbar{display:none}
+.panel{--c:var(--acc);border-radius:16px;background:rgba(255,255,255,.028);border:1px solid rgba(130,160,220,.16);
+  padding:clamp(16px,2.4vh,24px);transition:border-color .3s,box-shadow .3s,transform .3s;opacity:0;transform:translateY(24px)}
+.scene2.on .panel{opacity:1;transform:none;transition:opacity .5s,transform .5s,border-color .3s,box-shadow .3s}
+.panel:hover{border-color:var(--c);box-shadow:0 0 26px color-mix(in srgb,var(--c) 22%,transparent);transform:translateY(-4px)!important}
+.panel .cap{font-size:10px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;margin-bottom:14px}
+.p-hero{grid-column:1/13;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;--c:var(--acc)}
+.p-hero h1{font-family:'Unbounded';font-weight:900;font-size:clamp(30px,5.6vw,58px);line-height:1.02}
+.p-hero h1 span{background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.p-hero .role{font-size:clamp(11px,1.5vw,13px);letter-spacing:.3em;color:var(--acc);text-transform:uppercase}
+.p-dir{grid-column:1/6;--c:var(--acc3)}
+.p-soc{grid-column:6/13;--c:var(--acc2)}
+.p-stat1{grid-column:1/4;--c:var(--acc4)}
+.p-stat2{grid-column:4/8;--c:var(--acc)}
+.p-stat3{grid-column:8/13;--c:var(--acc3)}
+.big-link{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);
+  padding:13px 4px;border-bottom:1px solid rgba(130,160,220,.14);font-size:clamp(14px,1.8vw,17px);font-weight:500;transition:.25s}
+.big-link:last-child{border-bottom:none}
+.big-link svg{width:18px;height:18px;fill:var(--dim);transition:.25s}
+.big-link .v{margin-left:auto;color:var(--dim);font-size:clamp(10px,1.4vw,12px);font-weight:300;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:50%}
+.big-link:hover{color:var(--acc3);padding-left:12px}
+.big-link:hover svg{fill:var(--acc3)}
+.big-link:hover .v{color:var(--ink)}
+.socgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+a.soc{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:500;
+  padding:13px 15px;border-radius:12px;border:1px solid rgba(130,160,220,.16);background:rgba(255,255,255,.02);transition:.25s}
+a.soc svg{width:16px;height:16px;fill:var(--dim);transition:.25s}
+a.soc:hover{border-color:var(--acc2);color:#fff;transform:translateY(-3px);box-shadow:0 8px 20px rgba(124,140,255,.2)}
+a.soc:hover svg{fill:var(--acc2)}
+.stat b{display:block;font-family:'Unbounded';font-weight:700;font-size:clamp(24px,3.4vw,38px);color:var(--c)}
+.stat span{font-size:10.5px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+@media (max-width:760px){
+  .p-dir,.p-soc{grid-column:1/13}
+  .p-stat1,.p-stat2,.p-stat3{grid-column:1/13}
+  .big-link .v{display:none}
+}
+.prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc2));z-index:30;width:0}
+.vars{position:fixed;right:10px;bottom:10px;z-index:40;display:flex;flex-wrap:wrap;gap:4px;font-size:10px;max-width:55vw;justify-content:flex-end}
+.vars a{color:var(--dim);text-decoration:none;border:1px solid rgba(130,160,220,.3);padding:4px 9px;border-radius:99px;background:rgba(4,6,12,.8)}
+.vars a.on{color:var(--acc);border-color:var(--acc)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+
+<!-- SCENE 1 -->
+<div class="scene1" id="scene1">
+  <div class="rig" id="rig">
+    <div class="plate">
+      <div class="frame">
+        <div class="wdg w-a" style="--z:18px"><div class="t">signal</div>
+          <svg viewBox="0 0 200 120" preserveAspectRatio="none">
+            <defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="rgba(77,227,196,.35)"/><stop offset="1" stop-color="rgba(77,227,196,0)"/></linearGradient></defs>
+            <path d="M0,95 L25,80 L50,88 L75,55 L100,66 L125,38 L150,48 L175,22 L200,30 L200,120 L0,120 Z" fill="url(#ga)"/>
+            <path d="M0,95 L25,80 L50,88 L75,55 L100,66 L125,38 L150,48 L175,22 L200,30" fill="none" stroke="#4de3c4" stroke-width="2.5"/>
+            <circle cx="175" cy="22" r="4" fill="#4de3c4"/>
+          </svg>
+        </div>
+        <div class="wdg w-b" style="--z:30px"><div class="t">index</div><div class="kpi"><b>98.4</b><span>+12%</span></div></div>
+        <div class="wdg w-c" style="--z:26px"><div class="t">load</div>
+          <div class="bars"><i style="height:45%"></i><i style="height:70%"></i><i style="height:55%"></i><i style="height:88%"></i><i style="height:62%"></i><i style="height:95%"></i></div>
+        </div>
+        <div class="wdg w-d" style="--z:22px"><div class="t">activity</div>
+          <div class="tick"><span>NLP · CV · RL · TRANSFORMERS · DIFFUSION · LLM · AGENTS · NLP · CV · RL · TRANSFORMERS · DIFFUSION · LLM · AGENTS · </span></div>
+        </div>
+        <div class="wdg w-e" style="--z:34px"><div class="t">notes</div><div class="txt"><i></i><i></i><i></i></div></div>
+        <div class="wdg w-f" style="--z:40px"><div class="t">core</div>
+          <div class="donutwrap"><svg viewBox="0 0 60 60" width="58">
+            <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(124,140,255,.15)" stroke-width="7"/>
+            <circle cx="30" cy="30" r="24" fill="none" stroke="#7c8cff" stroke-width="7" stroke-dasharray="113 151" stroke-linecap="round" transform="rotate(-90 30 30)"/>
+          </svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hint1" id="hint1"><b>зажми и вращай</b> · крути колесо — войти внутрь</div>
+
+<!-- SCENE 2 -->
+<div class="scene2" id="scene2">
+  <div class="dash">
+    <div class="panel p-hero">
+      <h1>СЕРГЕЙ <span>ПАРШИН</span></h1>
+      <div class="role">AI-специалист</div>
+    </div>
+    <div class="panel p-dir">
+      <div class="cap">Прямая связь</div>
+      <a class="big-link" href="tel:+79930001122"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>Телефон<span class="v">+7 993 000-11-22</span></a>
+      <a class="big-link" href="mailto:info@sergeyparshin.ru"><svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>Почта<span class="v">info@sergeyparshin.ru</span></a>
+    </div>
+    <div class="panel p-soc">
+      <div class="cap">Соцсети</div>
+      <div class="socgrid" id="socgrid"></div>
+    </div>
+    <div class="panel p-stat1 stat"><b>N1</b><span>neural core</span></div>
+    <div class="panel p-stat2 stat"><b>98.4</b><span>uptime index</span></div>
+    <div class="panel p-stat3 stat"><b>UTC+3</b><span>Moscow · 55.75°N 37.61°E</span></div>
+  </div>
+</div>
+
+<script>
+const SOCS=[
+ {k:"whatsapp",t:"WhatsApp",u:"https://wa.me/79930001122"},
+ {k:"telegram",t:"Telegram",u:"https://t.me/buyholdsellrepeat"},
+ {k:"instagram",t:"Instagram",u:"https://instagram.com/sergeyparshin.ru"},
+ {k:"x",t:"Twitter",u:"https://x.com/sergeyparshin"},
+ {k:"facebook",t:"Facebook",u:"https://facebook.com/sergeyparshin.ru"},
+ {k:"github",t:"GitHub",u:"https://github.com/sergeyparshin"},
+ {k:"steam",t:"Steam",u:"https://steamcommunity.com/id/sergeyparshin"}
+];
+const ICONS={
+ whatsapp:'<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.4-3c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.9.9-1.1 2.2-.2 3.9a11.6 11.6 0 0 0 4.5 4.2c1.7.8 2.4.9 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.5-.3z"/></svg>',
+ telegram:'<svg viewBox="0 0 24 24"><path d="M21.9 4.6 19 19.3c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.1 2.1c-.3.3-.5.5-.9.5l.3-4.5 8.3-7.5c.4-.3-.1-.5-.6-.2L7.7 13.2 3.3 11.8c-1-.3-1-1 .2-1.4l17.2-6.6c.8-.3 1.4.2 1.2.8z"/></svg>',
+ instagram:'<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8C2.4 4 4 2.4 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.2-9.6a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>',
+ x:'<svg viewBox="0 0 24 24"><path d="M18.9 2H22l-6.8 7.8L23.3 22h-6.3l-4.9-6.4L6.5 22H3.4l7.3-8.3L1 2h6.5l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>',
+ facebook:'<svg viewBox="0 0 24 24"><path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.6 1.6-1.6h1.7V3.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.3H7.3v3.2h2.8V21h3.4z"/></svg>',
+ github:'<svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C16.3 4.8 17.3 5 17.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>',
+ steam:'<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 9.5l5.4 2.2a2.8 2.8 0 0 1 1.6-.5l2.4-3.5v-.1a3.8 3.8 0 1 1 3.8 3.8h-.1l-3.4 2.5c0 .1.1.3.1.4a2.9 2.9 0 0 1-5.7.7l-3.9-1.6A10 10 0 1 0 12 2zM7.5 18.6l1.2.5a2.1 2.1 0 1 0 1.1-2.8l1.3.6a1.6 1.6 0 1 1-1.6 1.6l-2 .1zm8-6.6a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0zm-4.2 0a1.7 1.7 0 1 1 3.4 0 1.7 1.7 0 0 1-3.4 0z"/></svg>'
+};
+const sg=document.getElementById('socgrid');
+SOCS.forEach(L=>{
+  const a=document.createElement('a');a.className='soc';a.href=L.u;a.target='_blank';a.rel='noopener';
+  a.innerHTML=`${ICONS[L.k]}<span>${L.t}</span>`;sg.appendChild(a);
+});
+
+/* ===== engine: drag-rotate + scroll-dive ===== */
+const rig=document.getElementById('rig'),scene1=document.getElementById('scene1'),
+      scene2=document.getElementById('scene2'),hint1=document.getElementById('hint1');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* drag rotate */
+let dragging=false,dx=0,dy=0,rx=-14,ry=22,idle=0;
+rig.addEventListener('pointerdown',e=>{dragging=true;dx=e.clientX;dy=e.clientY;rig.setPointerCapture(e.pointerId);});
+addEventListener('pointermove',e=>{
+  if(!dragging)return;
+  ry=clamp(ry+(e.clientX-dx)*.35,-30,30);
+  rx=clamp(rx-(e.clientY-dy)*.35,-30,30);
+  dx=e.clientX;dy=e.clientY;
+});
+addEventListener('pointerup',()=>dragging=false);
+
+/* scroll dive */
+let target=0,p=0;
+addEventListener('wheel',e=>{e.preventDefault();target=clamp(target+e.deltaY/900,0,1);},{passive:false});
+let ts=null;
+addEventListener('touchstart',e=>{ts=e.touches[0].clientY;},{passive:true});
+addEventListener('touchmove',e=>{if(ts==null)return;
+  const d=ts-e.touches[0].clientY;ts=e.touches[0].clientY;
+  target=clamp(target+d/260,0,1);e.preventDefault();},{passive:false});
+addEventListener('keydown',e=>{
+  if(['ArrowDown','PageDown',' '].includes(e.key))target=1;
+  if(['ArrowUp','PageUp'].includes(e.key))target=0;
+});
+
+function frame(t){
+  p+=(target-p)*.075;
+  document.getElementById('prog').style.width=(p*100)+'%';
+
+  if(!dragging&&!reduced){idle=t*.0004;ry+=((Math.sin(idle)*14)-ry)*.01;}
+  /* dive: tilt to face-on, scale through camera */
+  const d=p; // 0..1
+  const curRx=rx*(1-d), curRy=ry*(1-d);
+  const sc=1+d*2.8;
+  rig.style.transform=`rotateX(${curRx}deg) rotateY(${curRy}deg) scale(${sc})`;
+  rig.style.opacity=1-clamp((d-0.62)/0.3,0,1);
+  scene1.style.filter=d>0.3?`blur(${(d-0.3)*14}px)`:'none';
+  scene1.style.pointerEvents=d>0.5?'none':'auto';
+  hint1.style.opacity=1-clamp(d/0.25,0,1);
+
+  /* scene2 overlay follows dive */
+  const o=clamp((d-0.55)/0.4,0,1);
+  scene2.style.opacity=o;
+  scene2.classList.toggle('on',o>0.6);
+  scene2.style.transform=`scale(${1.06-o*0.06})`;
+  requestAnimationFrame(frame);
+}
+if(reduced){target=1;p=1;}
+requestAnimationFrame(frame);
+</script>
+<div class="vars" id="vars"></div>
+<script src="vars.js"></script>
+</body>
+</html>
