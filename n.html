@@ -35,12 +35,36 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .p-hero h1 span{background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .p-hero .role{font-size:13px;letter-spacing:.3em;color:var(--acc);text-transform:uppercase}
 .p-dir{grid-column:1/6;--c:var(--acc3)}
-.p-xp{grid-column:6/13;--c:var(--acc)}
-.p-soc{grid-column:1/8;--c:var(--acc2)}
-.p-tech{grid-column:8/13;--c:var(--acc4)}
+.p-contrib{grid-column:6/13;--c:var(--acc)}
+.p-soc{grid-column:1/13;--c:var(--acc2)}
+.p-repos{grid-column:1/13;--c:var(--acc2)}
 .p-loc{grid-column:1/13;--c:var(--acc3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
   font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
 .p-loc b{color:var(--acc3);font-weight:500}
+
+/* github-style contribution graph */
+.contrib{overflow-x:auto;padding:4px 2px 2px;scrollbar-width:none}
+.contrib::-webkit-scrollbar{display:none}
+.cgraph{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;width:max-content;margin:0 auto}
+.cgraph i{width:10px;height:10px;border-radius:2px;background:#161b22}
+.cgraph i.l1{background:#0e4429}.cgraph i.l2{background:#006d32}.cgraph i.l3{background:#26a641}.cgraph i.l4{background:#39d353}
+.cmeta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:10.5px;color:var(--dim)}
+.cmeta .leg{display:flex;align-items:center;gap:3px}
+.cmeta .leg i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.cmeta b{color:var(--acc);font-weight:500}
+
+/* github-style pinned repos */
+.repos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.repo{display:block;text-decoration:none;color:var(--ink);border:1px solid rgba(130,160,220,.16);border-radius:12px;
+  padding:14px 16px;background:rgba(255,255,255,.02);transition:.25s;pointer-events:none}
+.rig.docked .repo{pointer-events:auto}
+.repo:hover{border-color:var(--acc2);transform:translateY(-3px);box-shadow:0 8px 20px rgba(124,140,255,.18)}
+.repo .rn{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--acc2)}
+.repo .rn svg{width:14px;height:14px;fill:var(--dim);flex:none}
+.repo .rd{margin:7px 0 10px;font-size:11px;line-height:1.55;color:var(--dim);font-weight:300}
+.repo .rm{display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
+.repo .rm .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
+.repo .rm svg{width:12px;height:12px;fill:var(--dim);vertical-align:-2px;margin-right:3px}
 
 .big-link{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);
   padding:12px 4px;border-bottom:1px solid rgba(130,160,220,.14);font-size:16px;font-weight:500;transition:.25s}
@@ -51,21 +75,7 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .big-link:hover svg{fill:var(--acc3)}
 .big-link:hover .v{color:var(--ink)}
 
-/* experience chart */
-.xp{display:flex;align-items:flex-end;gap:14px;height:110px;padding-top:8px}
-.xp .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
-.xp .bar{width:100%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--acc),rgba(77,227,196,.12));
-  transform-origin:bottom;animation:grow 1.6s cubic-bezier(.2,.8,.2,1) both}
-.xp .y{font-size:10px;color:var(--dim);letter-spacing:.1em}
-@keyframes grow{from{transform:scaleY(0)}}
 
-/* tech bars */
-.tech{display:flex;flex-direction:column;gap:11px}
-.tech .row{display:grid;grid-template-columns:92px 1fr 34px;align-items:center;gap:10px;font-size:12px}
-.tech .row .nm{color:var(--ink);font-weight:500}
-.tech .tr{height:6px;border-radius:3px;background:rgba(130,160,220,.14);overflow:hidden}
-.tech .fl{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--acc4),var(--acc2));animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both;transform-origin:left}
-.tech .pc{color:var(--dim);font-size:11px;text-align:right}
 
 .socgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px}
 a.soc{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:500;
@@ -83,7 +93,7 @@ a.soc:hover svg{fill:var(--acc2)}
 .vars a.on{color:var(--acc);border-color:var(--acc)}
 @media (max-width:1100px){.dash{width:96vw}}
 @media (max-width:760px){
-  .p-dir,.p-xp,.p-soc,.p-tech{grid-column:1/13}
+  .p-dir,.p-contrib,.p-soc,.p-repos{grid-column:1/13}
   .p-hero h1{font-size:clamp(28px,8vw,44px)}
   .big-link .v{display:none}
 }
@@ -107,14 +117,12 @@ a.soc:hover svg{fill:var(--acc2)}
         <a class="big-link" href="mailto:info@sergeyparshin.ru"><svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>Email<span class="v">info@sergeyparshin.ru</span></a>
       </div>
 
-      <div class="panel p-xp">
-        <div class="cap">AI Experience</div>
-        <div class="xp">
-          <div class="col"><div class="bar" style="height:34%;animation-delay:.05s"></div><div class="y">2022</div></div>
-          <div class="col"><div class="bar" style="height:52%;animation-delay:.15s"></div><div class="y">2023</div></div>
-          <div class="col"><div class="bar" style="height:70%;animation-delay:.25s"></div><div class="y">2024</div></div>
-          <div class="col"><div class="bar" style="height:86%;animation-delay:.35s"></div><div class="y">2025</div></div>
-          <div class="col"><div class="bar" style="height:100%;animation-delay:.45s"></div><div class="y">2026</div></div>
+      <div class="panel p-contrib">
+        <div class="cap">GitHub Activity</div>
+        <div class="contrib"><div class="cgraph" id="cgraph"></div></div>
+        <div class="cmeta">
+          <span><b id="ccount">0</b> contributions in the last year · @sergeyparshin</span>
+          <span class="leg">Less <i style="background:#161b22"></i><i style="background:#0e4429"></i><i style="background:#006d32"></i><i style="background:#26a641"></i><i style="background:#39d353"></i> More</span>
         </div>
       </div>
 
@@ -123,14 +131,29 @@ a.soc:hover svg{fill:var(--acc2)}
         <div class="socgrid" id="socgrid"></div>
       </div>
 
-      <div class="panel p-tech">
-        <div class="cap">Core Stack</div>
-        <div class="tech">
-          <div class="row"><span class="nm">PyTorch</span><span class="tr"><span class="fl" style="width:95%"></span></span><span class="pc">95</span></div>
-          <div class="row"><span class="nm">Python</span><span class="tr"><span class="fl" style="width:92%;animation-delay:.1s"></span></span><span class="pc">92</span></div>
-          <div class="row"><span class="nm">LLM / NLP</span><span class="tr"><span class="fl" style="width:88%;animation-delay:.2s"></span></span><span class="pc">88</span></div>
-          <div class="row"><span class="nm">TensorFlow</span><span class="tr"><span class="fl" style="width:80%;animation-delay:.3s"></span></span><span class="pc">80</span></div>
-          <div class="row"><span class="nm">Docker</span><span class="tr"><span class="fl" style="width:78%;animation-delay:.4s"></span></span><span class="pc">78</span></div>
+      <div class="panel p-repos">
+        <div class="cap">Projects</div>
+        <div class="repos">
+          <a class="repo" href="https://github.com/sergeyparshin" target="_blank" rel="noopener">
+            <span class="rn"><svg viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"/></svg>Quantara</span>
+            <span class="rd">AI-powered algorithmic crypto trading platform: 82 strategies, multi-exchange, self-learning ensemble, LSTM predictor, backtesting.</span>
+            <span class="rm"><span><i class="dot" style="background:#3572A5"></i>Python</span><span><svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>13</span></span>
+          </a>
+          <a class="repo" href="https://github.com/sergeyparshin" target="_blank" rel="noopener">
+            <span class="rn"><svg viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"/></svg>RouteFlare</span>
+            <span class="rd">Failover VPN access point for OpenWrt: VLESS/Trojan/Hysteria config pool, health-check, kill-switch, LuCI UI.</span>
+            <span class="rm"><span><i class="dot" style="background:#f1e05a"></i>ucode</span><span><svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>8</span></span>
+          </a>
+          <a class="repo" href="https://github.com/sergeyparshin" target="_blank" rel="noopener">
+            <span class="rn"><svg viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"/></svg>NetPilot</span>
+            <span class="rd">Intelligent DPI-bypass system for OpenWrt: site monitoring + automatic traffic configuration selection.</span>
+            <span class="rm"><span><i class="dot" style="background:#9599a3"></i>C</span><span><svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>6</span></span>
+          </a>
+          <a class="repo" href="https://github.com/sergeyparshin" target="_blank" rel="noopener">
+            <span class="rn"><svg viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"/></svg>Aristarch</span>
+            <span class="rd">Perplexity Tasks pipeline: scheduled AI research → local DB → GitHub knowledge base of model summaries.</span>
+            <span class="rm"><span><i class="dot" style="background:#3572A5"></i>Python</span><span><svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>4</span></span>
+          </a>
         </div>
       </div>
 
@@ -186,7 +209,7 @@ function measure(){
   const fitW=innerWidth/w*0.98, fitH=innerHeight/h*0.98;
   /* fit to height only when it doesn't shrink content below readable size;
      otherwise fit to width and let the dashboard scroll internally */
-  fit=Math.min(fitW, Math.max(fitH,1.0));
+  fit=Math.min(fitW, Math.max(fitH,1.0), 1.0); // never scale above 1:1 — keeps text crisp at dock
   start=Math.min(0.55, fit*0.62);
 }
 addEventListener('resize',measure);
@@ -233,9 +256,13 @@ function frame(t){
 
   const d=ease(clamp(p,0,1));
   if(!dragging&&p<0.02&&!reduced){ry+=((Math.sin(t*.0004)*14)-ry)*.012;rx+=((-14)-rx)*.012;}
-  const curRx=rx*(1-d), curRy=ry*(1-d);
-  const sc=start+(fit-start)*d;
-  rig.style.transform=`rotateX(${curRx}deg) rotateY(${curRy}deg) scale(${sc})`;
+  if(p>0.97){
+    rig.style.transform='none'; // docked: render 1:1, no rasterization blur
+  }else{
+    const curRx=rx*(1-d), curRy=ry*(1-d);
+    const sc=start+(fit-start)*d;
+    rig.style.transform=`rotateX(${curRx}deg) rotateY(${curRy}deg) scale(${sc})`;
+  }
 
   const docked=p>0.97;
   rig.classList.toggle('docked',docked);
@@ -244,6 +271,31 @@ function frame(t){
   hint.style.pointerEvents='none';
   requestAnimationFrame(frame);
 }
+/* GitHub-style contribution graph — deterministic pseudo-random, busy but natural */
+(function(){
+  const g=document.getElementById('cgraph');if(!g)return;
+  let seed=1337;const rnd=()=>((seed=seed*16807%2147483647)/2147483647);
+  const WEEKS=53,DAYS=7;let total=0;
+  for(let w=0;w<WEEKS;w++){
+    const surge=(Math.sin(w*.45)+1)/2;          // activity waves over the year
+    const hot=rnd()<.28;                        // occasional sprint weeks
+    for(let d=0;d<DAYS;d++){
+      const i=document.createElement('i');
+      const weekend=(d===0||d===6);
+      let act=(.42+.5*surge)*(hot?1.35:1)*(weekend?.45:1);
+      let lvl=0;const r=rnd();
+      if(r<act){
+        const q=rnd();
+        lvl=q<.3?1:q<.62?2:q<.88?3:4;
+        total+=lvl===1?1+lvl:lvl*2+Math.floor(rnd()*4);
+      }
+      if(lvl)i.className='l'+lvl;
+      g.appendChild(i);
+    }
+  }
+  document.getElementById('ccount').textContent=total.toLocaleString('en-US');
+})();
+
 measure();
 document.fonts?document.fonts.ready.then(measure):null;
 if(reduced){target=1;p=1;}
