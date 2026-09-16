@@ -48,8 +48,6 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .p-id h1 span{background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .p-soc{grid-column:1/13;--c:var(--acc2);display:flex;flex-direction:column;justify-content:center}
 .p-soc .cap{margin-bottom:10px}
-.ctrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-@media (max-width:560px){.ctrow{grid-template-columns:1fr}}
 .p-contrib{grid-column:1/13;--c:var(--acc)}
 .p-repos{grid-column:1/13;--c:var(--acc2)}
 .p-loc{grid-column:1/13;--c:var(--acc3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
@@ -84,8 +82,8 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .repo:hover{border-color:var(--acc2);transform:translateY(-3px);box-shadow:0 8px 20px rgba(124,140,255,.18)}
 .repo .rn{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--acc2)}
 .repo .rn svg{width:14px;height:14px;fill:var(--dim);flex:none}
-.repo .rd{margin:18px 0 32px;font-size:11px;line-height:1.32;color:var(--dim);font-weight:300}
-.repo .rm{display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
+.repo .rd{margin:18px 0 0;font-size:11px;line-height:1.32;color:var(--dim);font-weight:300}
+.repo .rm{margin-top:34px;display:flex;align-items:center;gap:14px;font-size:10.5px;color:var(--dim)}
 .repo .rm .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
 .repo .rm svg{width:12px;height:12px;fill:var(--dim);vertical-align:-2px;margin-right:3px}
 
@@ -100,7 +98,7 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 
 
 
-.socgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px}
+.socgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:10px}
 a.soc{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:500;
   padding:9px 14px;border-radius:12px;border:1px solid rgba(130,160,220,.16);background:rgba(255,255,255,.02);transition:.25s;pointer-events:none}
 .rig.docked a.soc{pointer-events:auto}
@@ -134,7 +132,6 @@ a.soc:hover svg{fill:var(--acc2)}
     <div class="dash" id="dash">
       <div class="panel p-soc">
         <div class="cap">Contacts & Socials</div>
-        <div class="ctrow" id="ctrow"></div>
         <div class="socgrid" id="socgrid"></div>
       </div>
 
@@ -215,11 +212,12 @@ const ICONS={
  facebook:'<svg viewBox="0 0 24 24"><path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.6 1.6-1.6h1.7V3.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.3H7.3v3.2h2.8V21h3.4z"/></svg>',
  github:'<svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C16.3 4.8 17.3 5 17.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>',
 };
-const sg=document.getElementById('socgrid'),ct=document.getElementById('ctrow');
+const sg=document.getElementById('socgrid');
 SOCS.forEach(L=>{
   const a=document.createElement('a');a.className='soc';a.href=L.u;a.target='_blank';a.rel='noopener';
+  if(L.k==='phone'||L.k==='mail')a.style.fontSize='11.5px';
   a.innerHTML=`${ICONS[L.k]}<span style="white-space:nowrap">${L.t}</span>`;
-  (L.k==='phone'||L.k==='mail')?ct.appendChild(a):sg.appendChild(a);
+  sg.appendChild(a);
 });
 
 /* ===== morph engine: the rig IS the dashboard ===== */
