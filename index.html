@@ -112,7 +112,7 @@ a.item .nm .scan{position:relative}
 </div>
 
 <div class="vars">
-  <a href="index.html" class="on">A</a><a href="b.html">B</a><a href="c.html">C</a>
+  <a href="index.html" class="on">A</a><a href="b.html">B</a><a href="c.html">C</a><a href="d.html">D</a><a href="e.html">E</a>
 </div>
 
 <script>
@@ -150,8 +150,7 @@ const ICONS={
 };
 const ARROW='<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>';
 
-let lang = localStorage.getItem('sp-lang') || (navigator.language||'').startsWith('ru') ? (localStorage.getItem('sp-lang')||'ru') : 'en';
-lang = localStorage.getItem('sp-lang') || (((navigator.language||'ru').startsWith('ru'))?'ru':'en');
+let lang = localStorage.getItem('sp-lang') || (((navigator.language||'ru').startsWith('ru'))?'ru':'en');
 
 const list=document.getElementById('list');
 function renderList(){

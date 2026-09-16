@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Сергей Паршин · info@sergeyparshin.ru</title>
+<meta name="description" content="Сергей Паршин — AI-специалист. Контакты и соцсети.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f3ee;--ink:#101010;--dim:#8b887e;--acc:#e000c8;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospace;overflow:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--acc);color:#fff}
+.grid-bg{position:fixed;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(16,16,16,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(16,16,16,.05) 1px,transparent 1px);
+  background-size:8vw 8vw}
+
+.center{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;text-align:center;pointer-events:none;width:100%}
+.center h1{font-weight:700;font-size:clamp(30px,7vw,84px);letter-spacing:-.03em;line-height:1}
+.center h1 span{color:var(--acc)}
+.center p{margin-top:12px;font-size:clamp(10px,1.4vw,12px);letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+
+.frag{position:fixed;z-index:3;transform:translate(-50%,-50%) rotate(0deg);
+  transition:top .33s cubic-bezier(.3,.7,.4,1),left .33s cubic-bezier(.3,.7,.4,1),transform .33s cubic-bezier(.3,.7,.4,1);
+  will-change:top,left,transform}
+.frag a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);
+  font-size:clamp(13px,1.8vw,17px);font-weight:500;padding:10px 16px;
+  background:var(--bg);border:1.5px solid var(--ink);cursor:pointer;white-space:nowrap;
+  box-shadow:4px 4px 0 rgba(16,16,16,.9);transition:box-shadow .2s,background .2s,color .2s}
+.frag a:hover{background:var(--ink);color:var(--bg);box-shadow:2px 2px 0 var(--acc)}
+.frag a .no{font-size:.65em;color:var(--acc);font-weight:700}
+.frag.lost{pointer-events:none;opacity:0;transition:top .6s,left .6s,opacity .6s}
+
+.hint{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;
+  font-size:10.5px;letter-spacing:.25em;color:var(--dim);text-transform:uppercase;text-align:center;width:90%}
+.langs{position:fixed;top:22px;right:22px;z-index:9;display:flex;gap:4px}
+.langs button{background:var(--bg);border:1.5px solid var(--ink);color:var(--ink);font:inherit;font-size:10px;letter-spacing:.2em;padding:5px 12px;cursor:pointer;box-shadow:3px 3px 0 rgba(16,16,16,.9)}
+.langs button.on{background:var(--ink);color:var(--bg)}
+.stamp{position:fixed;top:22px;left:22px;z-index:9;font-size:10px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+.vars{position:fixed;right:14px;bottom:14px;z-index:9;display:flex;gap:6px;font-size:11px}
+.vars a{color:var(--ink);text-decoration:none;border:1.5px solid var(--ink);padding:5px 10px;background:var(--bg);box-shadow:2px 2px 0 rgba(16,16,16,.9)}
+.vars a.on{background:var(--ink);color:var(--bg)}
+@media (prefers-reduced-motion:reduce){.frag{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="stamp">anti-card · est. 2026</div>
+<div class="langs"><button id="bRu">RU</button><button id="bEn">EN</button></div>
+
+<div class="center">
+  <h1 id="nm"></h1>
+  <p id="rl"></p>
+</div>
+
+<div id="field"></div>
+<div class="hint" id="hint"></div>
+<div class="vars"><a href="index.html">A</a><a href="b.html">B</a><a href="c.html">C</a><a href="d.html">D</a><a href="e.html" class="on">E</a></div>
+
+<script>
+const T={
+ ru:{name:"СЕРГЕЙ<span>·</span>ПАРШИН",role:"AI SPECIALIST — NEURAL NETWORKS",
+     hint:"поймай ссылку, чтобы открыть · они убегают",labels:{phone:"Телефон",mail:"Почта",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}},
+ en:{name:"SERGEY<span>·</span>PARSHIN",role:"AI SPECIALIST — NEURAL NETWORKS",
+     hint:"catch a link to open it · they run away",labels:{phone:"Phone",mail:"Email",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}}
+};
+const LINKS=[
+ {k:"phone",u:"tel:+79930001122"},{k:"mail",u:"mailto:info@sergeyparshin.ru"},
+ {k:"whatsapp",u:"https://wa.me/79930001122"},{k:"telegram",u:"https://t.me/buyholdsellrepeat"},
+ {k:"instagram",u:"https://instagram.com/sergeyparshin.ru"},{k:"x",u:"https://x.com/sergeyparshin"},
+ {k:"facebook",u:"https://facebook.com/sergeyparshin.ru"},{k:"github",u:"https://github.com/sergeyparshin"},
+ {k:"steam",u:"https://steamcommunity.com/id/sergeyparshin"}
+];
+let lang=localStorage.getItem('sp-lang')||(((navigator.language||'ru').startsWith('ru'))?'ru':'en');
+const field=document.getElementById('field');
+const fine=matchMedia('(pointer:fine)').matches;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* quadrant spatial index (borrowed mechanic): 4x4 zones, occupancy tracking */
+const QN=4;
+let zones=[];
+function freeZone(){const free=[];for(let i=0;i<QN*QN;i++)if(!zones[i])free.push(i);
+ if(!free.length)return Math.random()*QN*QN|0;return free[Math.random()*free.length|0];}
+function posInZone(z,mobile){
+ const r=Math.floor(z/QN),c=z%QN;
+ const y0=8+r*(84/QN),x0=8+c*(84/QN);
+ const pad=mobile?6:4;
+ return{y:y0+pad+Math.random()*(84/QN-pad*2),x:x0+pad+Math.random()*(84/QN-pad*2)};
+}
+const frags=[];
+function render(){
+  document.documentElement.lang=lang;
+  document.getElementById('nm').innerHTML=T[lang].name;
+  document.getElementById('rl').textContent=T[lang].role;
+  document.getElementById('hint').textContent=T[lang].hint;
+  document.getElementById('bRu').classList.toggle('on',lang==='ru');
+  document.getElementById('bEn').classList.toggle('on',lang==='en');
+  field.innerHTML='';frags.length=0;zones=Array(QN*QN).fill(false);
+  const mobile=innerWidth<600;
+  LINKS.forEach((L,i)=>{
+    const z=freeZone();zones[z]=true;
+    const p=posInZone(z,mobile);
+    const el=document.createElement('div');el.className='frag';
+    el.style.top=p.y+'vh';el.style.left=p.x+'vw';
+    el.dataset.rot=0;
+    const a=document.createElement('a');a.href=L.u;
+    if(!L.u.startsWith('tel:')&&!L.u.startsWith('mailto:')){a.target='_blank';a.rel='noopener';}
+    a.innerHTML=`<span class="no">0${i+1}</span>${T[lang].labels[L.k]}`;
+    el.appendChild(a);field.appendChild(el);
+    frags.push({el,zone:z});
+    if(fine&&!reduced){
+      el.addEventListener('pointerenter',()=>slip(el));
+    }
+  });
+}
+function slip(el){
+  if(el.classList.contains('lost'))return;
+  zones[el._zone]=false;
+  const z=freeZone();zones[z]=true;el._zone=z;
+  const p=posInZone(z,innerWidth<600);
+  const rot=(parseFloat(el.dataset.rot)||0)+(Math.random()*120-60);
+  el.dataset.rot=rot;
+  el.style.top=p.y+'vh';el.style.left=p.x+'vw';
+  el.style.transform=`translate(-50%,-50%) rotate(${rot}deg)`;
+  /* rare escape (1/14): fragment leaves viewport then returns */
+  if(Math.random()<1/14){
+    el.classList.add('lost');
+    el.style.top=(Math.random()<.5?-20:120)+'vh';
+    setTimeout(()=>{
+      el.classList.remove('lost');
+      const z2=freeZone();zones[z2]=true;el._zone=z2;
+      const p2=posInZone(z2,innerWidth<600);
+      el.style.top=p2.y+'vh';el.style.left=p2.x+'vw';
+    },900);
+  }
+}
+frags._init=true;
+document.getElementById('bRu').onclick=()=>{lang='ru';localStorage.setItem('sp-lang',lang);render();};
+document.getElementById('bEn').onclick=()=>{lang='en';localStorage.setItem('sp-lang',lang);render();};
+addEventListener('resize',()=>render());
+render();
+
+/* touch devices: gentle autonomous drift instead of slip-away */
+if(!fine&&!reduced){
+  setInterval(()=>{
+    const f=frags[Math.random()*frags.length|0];
+    if(f&&!f.el.classList.contains('lost'))slip(f.el);
+  },2600);
+}
+
+/* document title alternation (borrowed craft detail) */
+setInterval(()=>{
+  document.title=document.title.includes('@')
+    ?(lang==='ru'?'Сергей Паршин — контакты':'Sergey Parshin — contacts')
+    :'info@sergeyparshin.ru';
+},3000);
+</script>
+</body>
+</html>
