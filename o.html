@@ -30,19 +30,35 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .rig.docked .panel{pointer-events:auto}
 .rig.docked .panel:hover{border-color:var(--c);box-shadow:0 0 26px color-mix(in srgb,var(--c) 22%,transparent);transform:translateY(-4px)}
 .panel .cap{font-size:10px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;margin-bottom:14px}
-.p-hero{grid-column:1/13;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;--c:var(--acc)}
-.p-hero h1{font-family:'Unbounded';font-weight:900;font-size:52px;line-height:1.02;letter-spacing:.01em}
-.p-hero h1 span{background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.p-hero .role{font-size:13px;letter-spacing:.3em;color:var(--acc);text-transform:uppercase}
-.p-dir{grid-column:1/6;--c:var(--acc3)}
-.p-contrib{grid-column:6/13;--c:var(--acc)}
+/* ID-card panel: photo + name */
+.p-id{grid-column:1/5;--c:var(--acc);display:flex;flex-direction:column;gap:14px}
+.photo{position:relative;aspect-ratio:1;border-radius:14px;border:1px solid rgba(130,160,220,.2);overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,rgba(77,227,196,.09),rgba(124,140,255,.05) 55%,transparent 75%);
+  display:flex;align-items:center;justify-content:center;perspective:500px;cursor:grab;touch-action:none}
+.photo:active{cursor:grabbing}
+.photo .alien{font-size:clamp(72px,9vw,110px);line-height:1;transform-style:preserve-3d;user-select:none;pointer-events:none;
+  filter:drop-shadow(0 12px 24px rgba(57,211,83,.25))}
+.photo .ring{position:absolute;inset:12%;border:1px dashed rgba(77,227,196,.25);border-radius:50%;pointer-events:none;animation:spin 24s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.photo .tag{position:absolute;left:10px;bottom:8px;font-size:9px;letter-spacing:.28em;color:var(--dim);text-transform:uppercase;pointer-events:none}
+.p-id h1{font-family:'Unbounded';font-weight:900;font-size:clamp(22px,2.6vw,32px);line-height:1.08;letter-spacing:.01em}
+.p-id h1 span{display:block;background:linear-gradient(100deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.p-id .sub{font-size:10px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase}
+.p-dir{grid-column:5/13;--c:var(--acc3);display:flex;flex-direction:column;justify-content:center}
 .p-soc{grid-column:1/13;--c:var(--acc2)}
+.p-contrib{grid-column:1/13;--c:var(--acc)}
 .p-repos{grid-column:1/13;--c:var(--acc2)}
 .p-loc{grid-column:1/13;--c:var(--acc3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
   font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
 .p-loc b{color:var(--acc3);font-weight:500}
 
 /* github-style contribution graph */
+.cwrap{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start}
+.cdays{display:grid;grid-template-rows:repeat(7,10px);gap:3px;margin-top:16px;font-size:8.5px;color:var(--dim);line-height:10px}
+.cdays span:nth-child(odd){visibility:hidden}
+.cmain{min-width:0}
+.cmonths{display:grid;grid-auto-flow:column;grid-auto-columns:10px;gap:3px;font-size:9px;color:var(--dim);margin:0 auto 5px;width:max-content;letter-spacing:.02em}
+.cmonths i{font-style:normal;white-space:nowrap;overflow:visible}
 .contrib{overflow-x:auto;padding:4px 2px 2px;scrollbar-width:none}
 .contrib::-webkit-scrollbar{display:none}
 .cgraph{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px;width:max-content;margin:0 auto}
@@ -96,8 +112,9 @@ a.soc:hover svg{fill:var(--acc2)}
 .vars a.on{color:var(--acc);border-color:var(--acc)}
 @media (max-width:1100px){.dash{width:96vw}}
 @media (max-width:760px){
-  .p-dir,.p-contrib,.p-soc,.p-repos{grid-column:1/13}
-  .p-hero h1{font-size:clamp(28px,8vw,44px)}
+  .p-id,.p-dir,.p-contrib,.p-soc,.p-repos{grid-column:1/13}
+  .p-id{flex-direction:row;align-items:center}
+  .p-id .photo{width:38%;flex:none}
   .big-link .v{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -109,9 +126,16 @@ a.soc:hover svg{fill:var(--acc2)}
 <div class="stage">
   <div class="rig" id="rig">
     <div class="dash" id="dash">
-      <div class="panel p-hero">
-        <h1>SERGEY <span>PARSHIN</span></h1>
-        <div class="role">AI Specialist</div>
+      <div class="panel p-id">
+        <div class="photo" id="photo">
+          <div class="ring"></div>
+          <div class="alien" id="alien">👽</div>
+          <div class="tag">id · sp-01</div>
+        </div>
+        <div>
+          <h1>SERGEY <span>PARSHIN</span></h1>
+          <div class="sub">Moscow · UTC+3</div>
+        </div>
       </div>
 
       <div class="panel p-dir">
@@ -120,18 +144,24 @@ a.soc:hover svg{fill:var(--acc2)}
         <a class="big-link" href="mailto:info@sergeyparshin.ru"><svg viewBox="0 0 24 24"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>Email<span class="v">info@sergeyparshin.ru</span></a>
       </div>
 
+      <div class="panel p-soc">
+        <div class="cap">Socials</div>
+        <div class="socgrid" id="socgrid"></div>
+      </div>
+
       <div class="panel p-contrib">
         <div class="cap">GitHub Activity</div>
-        <div class="contrib"><div class="cgraph" id="cgraph"></div></div>
+        <div class="cwrap">
+          <div class="cdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+          <div class="cmain">
+            <div class="cmonths" id="cmonths"></div>
+            <div class="contrib"><div class="cgraph" id="cgraph"></div></div>
+          </div>
+        </div>
         <div class="cmeta">
           <span><b id="ccount">0</b> contributions in the last year · @sergeyparshin</span>
           <span class="leg">Less <i style="background:#161b22"></i><i style="background:#0e4429"></i><i style="background:#006d32"></i><i style="background:#26a641"></i><i style="background:#39d353"></i> More</span>
         </div>
-      </div>
-
-      <div class="panel p-soc">
-        <div class="cap">Socials</div>
-        <div class="socgrid" id="socgrid"></div>
       </div>
 
       <div class="panel p-repos">
@@ -215,6 +245,32 @@ function measure(){
 }
 addEventListener('resize',measure);
 
+/* draggable alien avatar — spins in 3D with inertia, independent of the rig */
+(function(){
+  const ph=document.getElementById('photo'),al=document.getElementById('alien');
+  if(!ph||!al)return;
+  let ax=-8,ay=18,vx=0,vy=0,adrag=false,lx=0,ly=0;
+  ph.addEventListener('pointerdown',e=>{
+    e.stopPropagation();e.preventDefault();
+    adrag=true;lx=e.clientX;ly=e.clientY;ph.setPointerCapture(e.pointerId);
+  });
+  addEventListener('pointermove',e=>{
+    if(!adrag)return;
+    vy=(e.clientX-lx)*.45;vx=-(e.clientY-ly)*.45;
+    ay+=vy;ax=Math.max(-70,Math.min(70,ax+vx));
+    lx=e.clientX;ly=e.clientY;
+  });
+  addEventListener('pointerup',()=>adrag=false);
+  (function spin(){
+    if(!adrag){
+      ax+=vx;ay+=vy;vx*=.94;vy*=.94;ax*=.985;
+      ay+=.12; // idle slow spin
+    }
+    al.style.transform=`rotateX(${ax}deg) rotateY(${ay}deg)`;
+    requestAnimationFrame(spin);
+  })();
+})();
+
 rig.addEventListener('pointerdown',e=>{
   if(p>0.05)return;
   dragging=true;dx=e.clientX;dy=e.clientY;rig.setPointerCapture(e.pointerId);
@@ -295,6 +351,18 @@ function frame(t){
     }
   }
   document.getElementById('ccount').textContent=total.toLocaleString('en-US');
+  /* month labels aligned to week columns */
+  const mo=document.getElementById('cmonths');
+  if(mo){
+    const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const now=new Date();let prev=-1;
+    for(let w=0;w<53;w++){
+      const dt=new Date(now);dt.setDate(dt.getDate()-(52-w)*7);
+      const m=dt.getMonth();const i=document.createElement('i');
+      if(m!==prev){i.textContent=MN[m];prev=m;}
+      mo.appendChild(i);
+    }
+  }
   /* playful twinkle: random active cells pulse gently */
   if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
     const cells=[...g.querySelectorAll('i[class]')];
