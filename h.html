@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Сергей Паршин — GRAVITY LAB</title>
+<meta name="description" content="Сергей Паршин — AI-специалист. Контакты и соцсети.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;800&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0f13;--ink:#f0f1f5;--dim:#71767f;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospace;
+  background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px}
+::selection{background:#ffd166;color:#231a00}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:2;padding:clamp(20px,4vw,44px);pointer-events:none}
+.hdr h1{font-family:'Unbounded',sans-serif;font-weight:800;font-size:clamp(22px,4.6vw,44px);line-height:1.05}
+.hdr h1 em{font-style:normal;color:#ffd166}
+.hdr p{margin-top:8px;font-size:clamp(10px,1.4vw,12px);letter-spacing:.28em;color:var(--dim);text-transform:uppercase}
+.langs{position:fixed;top:22px;right:22px;z-index:10;display:flex;gap:4px;pointer-events:auto}
+.langs button{background:#171920;border:1px solid #2a2d36;color:var(--dim);font:inherit;font-size:10px;letter-spacing:.2em;padding:5px 12px;cursor:pointer;border-radius:6px}
+.langs button.on{color:#231a00;background:#ffd166;border-color:#ffd166}
+
+.ball{position:absolute;z-index:3;touch-action:none;user-select:none;-webkit-user-select:none;
+  display:flex;align-items:center;gap:9px;padding:13px 20px;border-radius:99px;cursor:grab;
+  font-size:clamp(12px,1.6vw,14px);font-weight:500;letter-spacing:.03em;white-space:nowrap;
+  border:1.5px solid rgba(255,255,255,.14);box-shadow:0 12px 28px rgba(0,0,0,.45);
+  transition:box-shadow .2s;will-change:transform;text-decoration:none}
+.ball:active{cursor:grabbing}
+.ball svg{width:16px;height:16px;flex:none}
+.ball:hover{box-shadow:0 16px 36px rgba(0,0,0,.6),0 0 0 3px rgba(255,255,255,.08)}
+.ball.c1{background:linear-gradient(135deg,#ffd166,#f4a261);color:#23180a}
+.ball.c2{background:linear-gradient(135deg,#7cf5ff,#4a9eda);color:#032130}
+.ball.c3{background:linear-gradient(135deg,#c99aff,#8a5cf0);color:#1d1033}
+.ball.c4{background:linear-gradient(135deg,#8ef0b2,#3fbf7f);color:#062715}
+.ball.c5{background:linear-gradient(135deg,#ff9db0,#f0547e);color:#380a18}
+
+.hint{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;font-size:10.5px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;text-align:center;width:92%}
+.vars{position:fixed;right:10px;bottom:10px;z-index:10;display:flex;flex-wrap:wrap;gap:4px;font-size:10px;max-width:50vw;justify-content:flex-end}
+.vars a{color:var(--dim);text-decoration:none;border:1px solid #2a2d36;padding:4px 9px;border-radius:99px;background:rgba(14,15,19,.8)}
+.vars a.on{color:#ffd166;border-color:#ffd166}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <h1 id="nm"></h1>
+  <p data-i18n="role">AI Specialist · Gravity Lab</p>
+</header>
+<div class="langs"><button id="bRu">RU</button><button id="bEn">EN</button></div>
+<div id="world"></div>
+<div class="hint" id="hint"></div>
+
+<script>
+const T={
+ ru:{name:'СЕРГЕЙ<br><em>ПАРШИН</em>',hint:"хватай и швыряй контакты · клик — открыть",
+     labels:{phone:"Телефон",mail:"Почта",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}},
+ en:{name:'SERGEY<br><em>PARSHIN</em>',hint:"grab & throw the contacts · click to open",
+     labels:{phone:"Phone",mail:"Email",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}}
+};
+const LINKS=[
+ {k:"phone",u:"tel:+79930001122",c:"c1"},{k:"mail",u:"mailto:info@sergeyparshin.ru",c:"c2"},
+ {k:"whatsapp",u:"https://wa.me/79930001122",c:"c4"},{k:"telegram",u:"https://t.me/buyholdsellrepeat",c:"c2"},
+ {k:"instagram",u:"https://instagram.com/sergeyparshin.ru",c:"c5"},{k:"x",u:"https://x.com/sergeyparshin",c:"c3"},
+ {k:"facebook",u:"https://facebook.com/sergeyparshin.ru",c:"c3"},{k:"github",u:"https://github.com/sergeyparshin",c:"c4"},
+ {k:"steam",u:"https://steamcommunity.com/id/sergeyparshin",c:"c5"}
+];
+const ICONS={
+ phone:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>',
+ mail:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+ whatsapp:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.4-3c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.9.9-1.1 2.2-.2 3.9a11.6 11.6 0 0 0 4.5 4.2c1.7.8 2.4.9 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.5-.3z"/></svg>',
+ telegram:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.6 19 19.3c-.2 1-.8 1.2-1.6.8l-4.5-3.3-2.1 2.1c-.3.3-.5.5-.9.5l.3-4.5 8.3-7.5c.4-.3-.1-.5-.6-.2L7.7 13.2 3.3 11.8c-1-.3-1-1 .2-1.4l17.2-6.6c.8-.3 1.4.2 1.2.8z"/></svg>',
+ instagram:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9-.1-1.3-.1-1.6-.1-4.8s0-3.6.1-4.8C2.4 4 4 2.4 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.2-9.6a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg>',
+ x:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.3 22h-6.3l-4.9-6.4L6.5 22H3.4l7.3-8.3L1 2h6.5l4.4 5.9L18.9 2zm-1.1 18h1.7L7.1 3.9H5.3L17.8 20z"/></svg>',
+ facebook:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.6 1.6-1.6h1.7V3.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.3H7.3v3.2h2.8V21h3.4z"/></svg>',
+ github:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C16.3 4.8 17.3 5 17.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>',
+ steam:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-10 9.5l5.4 2.2a2.8 2.8 0 0 1 1.6-.5l2.4-3.5v-.1a3.8 3.8 0 1 1 3.8 3.8h-.1l-3.4 2.5c0 .1.1.3.1.4a2.9 2.9 0 0 1-5.7.7l-3.9-1.6A10 10 0 1 0 12 2zM7.5 18.6l1.2.5a2.1 2.1 0 1 0 1.1-2.8l1.3.6a1.6 1.6 0 1 1-1.6 1.6l-2 .1zm8-6.6a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0zm-4.2 0a1.7 1.7 0 1 1 3.4 0 1.7 1.7 0 0 1-3.4 0z"/></svg>'
+};
+let lang=localStorage.getItem('sp-lang')||(((navigator.language||'ru').startsWith('ru'))?'ru':'en');
+const world=document.getElementById('world');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const bodies=[];
+
+function render(){
+  document.documentElement.lang=lang;
+  document.getElementById('nm').innerHTML=T[lang].name;
+  document.getElementById('hint').textContent=T[lang].hint;
+  document.getElementById('bRu').classList.toggle('on',lang==='ru');
+  document.getElementById('bEn').classList.toggle('on',lang==='en');
+  world.innerHTML='';bodies.length=0;
+  LINKS.forEach((L,i)=>{
+    const a=document.createElement('a');a.className='ball '+L.c;a.href=L.u;
+    a.innerHTML=`${ICONS[L.k]}<span>${T[lang].labels[L.k]}</span>`;
+    world.appendChild(a);
+    const w=a.offsetWidth||120,h=a.offsetHeight||44;
+    bodies.push({el:a,url:L.u,
+      x:60+Math.random()*(innerWidth-w-120), y:-(80+i*90)-Math.random()*200,
+      vx:(Math.random()-.5)*3, vy:0, w, h,
+      drag:false, moved:0});
+  });
+}
+document.getElementById('bRu').onclick=()=>{lang='ru';localStorage.setItem('sp-lang',lang);render();};
+document.getElementById('bEn').onclick=()=>{lang='en';localStorage.setItem('sp-lang',lang);render();};
+
+/* pointer drag & throw */
+let act=null;
+world.addEventListener('pointerdown',e=>{
+  const el=e.target.closest('.ball');if(!el)return;
+  const b=bodies.find(b=>b.el===el);if(!b)return;
+  act={b,px:e.clientX,py:e.clientY,vx:0,vy:0};
+  b.drag=true;b.moved=0;el.setPointerCapture(e.pointerId);
+  e.preventDefault();
+});
+addEventListener('pointermove',e=>{
+  if(!act)return;
+  const dx=e.clientX-act.px,dy=e.clientY-act.py;
+  act.b.x+=dx;act.b.y+=dy;
+  act.vx=dx;act.vy=dy;
+  act.b.moved+=Math.abs(dx)+Math.abs(dy);
+  act.px=e.clientX;act.py=e.clientY;
+});
+addEventListener('pointerup',e=>{
+  if(!act)return;
+  act.b.drag=false;
+  act.b.vx=act.vx*1.4;act.b.vy=act.vy*1.4;
+  const b=act.b;act=null;
+  if(b.moved<8){ // treat as click
+    if(b.url.startsWith('http'))window.open(b.url,'_blank','noopener');
+    else location.href=b.url;
+  }
+});
+world.addEventListener('click',e=>e.preventDefault());
+
+/* physics loop */
+const G=.55,REST=.62,FR=.985;
+function step(){
+  for(const b of bodies){
+    if(!b.drag&&!reduced){
+      b.vy+=G;b.vx*=FR;b.vy*=FR;
+      b.x+=b.vx;b.y+=b.vy;
+      const fl=innerHeight-16;
+      if(b.y+b.h>fl){b.y=fl-b.h;b.vy*=-REST;b.vx*=.82;if(Math.abs(b.vy)<1)b.vy=0;}
+      if(b.y<0){b.y=0;b.vy*=-REST;}
+      if(b.x<8){b.x=8;b.vx*=-REST;}
+      if(b.x+b.w>innerWidth-8){b.x=innerWidth-8-b.w;b.vx*=-REST;}
+    }
+    b.el.style.transform=`translate(${b.x}px,${b.y}px)`;
+  }
+  requestAnimationFrame(step);
+}
+render();
+/* re-measure after fonts load */
+setTimeout(()=>bodies.forEach(b=>{b.w=b.el.offsetWidth;b.h=b.el.offsetHeight;}),600);
+step();
+addEventListener('resize',()=>bodies.forEach(b=>{b.x=Math.min(b.x,innerWidth-b.w-8);b.y=Math.min(b.y,innerHeight-b.h-16);}));
+</script>
+<div class="vars" id="vars"></div>
+<script src="vars.js"></script>
+</body>
+</html>

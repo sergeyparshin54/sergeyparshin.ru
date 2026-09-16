@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Сергей Паршин — HOLO CARD</title>
+<meta name="description" content="Сергей Паршин — AI-специалист. Контакты и соцсети.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;700&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070d;--ink:#eef2ff;--dim:#6a7086;--acc:#7cf5ff;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospace;overflow-x:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100svh;padding:70px 18px 90px}
+body::before{content:"";position:fixed;inset:0;background:
+  radial-gradient(60% 50% at 20% 10%,rgba(124,245,255,.07),transparent),
+  radial-gradient(50% 40% at 85% 90%,rgba(200,107,255,.08),transparent)}
+::selection{background:var(--acc);color:#03222a}
+
+.scene{perspective:1200px;z-index:1}
+.card{position:relative;width:min(520px,92vw);aspect-ratio:1.586;border-radius:18px;
+  transform-style:preserve-3d;transition:transform .12s linear;cursor:grab;
+  background:linear-gradient(135deg,#10101c 0%,#181828 45%,#0c0c16 100%);
+  border:1px solid rgba(140,160,220,.25);
+  box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08)}
+.card::before{ /* holo foil */
+  content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;
+  background:linear-gradient(115deg,transparent 20%,rgba(124,245,255,.25) 38%,rgba(255,120,220,.28) 50%,rgba(140,255,180,.22) 62%,transparent 80%);
+  background-size:250% 250%;background-position:calc(var(--gx,50)*1%) calc(var(--gy,50)*1%);
+  mix-blend-mode:color-dodge;opacity:.85}
+.card::after{ /* glare */
+  content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;
+  background:radial-gradient(40% 55% at calc(var(--gx,50)*1%) calc(var(--gy,50)*1%),rgba(255,255,255,.22),transparent 70%);
+  mix-blend-mode:overlay}
+.card .inner{position:absolute;inset:0;padding:clamp(18px,4.5%,30px);display:flex;flex-direction:column;transform:translateZ(40px)}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start}
+.chip{width:44px;height:33px;border-radius:6px;background:linear-gradient(135deg,#d9c98a,#a88d4a 55%,#e8db9f);
+  position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.chip::before{content:"";position:absolute;inset:6px 4px;border:1px solid rgba(60,45,10,.5);border-radius:3px}
+.card .brand{font-size:10px;letter-spacing:.4em;color:var(--dim);text-align:right}
+.card .brand b{display:block;color:var(--acc);font-size:11px}
+.card .name{margin-top:auto}
+.card .name .n1{font-family:'Unbounded',sans-serif;font-weight:700;font-size:clamp(24px,6vw,38px);letter-spacing:.02em;line-height:1.05;
+  background:linear-gradient(100deg,#fff,#9fdcff 60%,#e0b3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card .name .n2{font-size:11px;letter-spacing:.42em;color:var(--dim);margin-top:8px;text-transform:uppercase}
+.card .num{margin-top:16px;font-size:clamp(12px,2.4vw,15px);letter-spacing:.32em;color:#c8d4f0;font-weight:300}
+.card .foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px;font-size:10px;color:var(--dim);letter-spacing:.2em}
+.waves{display:flex;gap:3px;align-items:flex-end;height:22px}
+.waves i{width:3px;background:var(--acc);border-radius:2px;animation:wv 1.1s ease-in-out infinite}
+.waves i:nth-child(2){animation-delay:.15s}.waves i:nth-child(3){animation-delay:.3s}.waves i:nth-child(4){animation-delay:.45s}.waves i:nth-child(5){animation-delay:.6s}
+@keyframes wv{0%,100%{height:6px}50%{height:20px}}
+
+.links{margin-top:38px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:640px;z-index:1}
+a.lk{color:var(--ink);text-decoration:none;font-size:12px;letter-spacing:.05em;padding:9px 15px;border-radius:99px;
+  border:1px solid rgba(140,160,220,.25);background:rgba(16,16,28,.6);backdrop-filter:blur(6px);transition:.25s}
+a.lk:hover{border-color:var(--acc);color:var(--acc);box-shadow:0 0 18px rgba(124,245,255,.25);transform:translateY(-2px)}
+.hint{margin-top:20px;font-size:10px;letter-spacing:.3em;color:var(--dim);text-transform:uppercase;z-index:1;text-align:center}
+
+.langs{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9;display:flex;gap:4px}
+.langs button{background:rgba(16,16,28,.7);border:1px solid rgba(140,160,220,.3);color:var(--dim);font:inherit;font-size:10px;letter-spacing:.2em;padding:5px 12px;cursor:pointer;border-radius:99px}
+.langs button.on{color:#03222a;background:var(--acc);border-color:var(--acc)}
+.vars{position:fixed;right:10px;bottom:10px;z-index:9;display:flex;flex-wrap:wrap;gap:4px;font-size:10px;max-width:60vw;justify-content:flex-end}
+.vars a{color:var(--dim);text-decoration:none;border:1px solid rgba(140,160,220,.3);padding:4px 9px;border-radius:99px;background:rgba(7,7,13,.7)}
+.vars a.on{color:var(--acc);border-color:var(--acc)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="langs"><button id="bRu">RU</button><button id="bEn">EN</button></div>
+
+<div class="scene">
+  <div class="card" id="card">
+    <div class="inner">
+      <div class="top">
+        <div class="chip"></div>
+        <div class="brand"><b>NEURAL&nbsp;ID</b><span data-i18n="brand">карта доступа</span></div>
+      </div>
+      <div class="name">
+        <div class="n1" data-i18n="n1">СЕРГЕЙ ПАРШИН</div>
+        <div class="n2" data-i18n="n2">AI Specialist · Deep Learning</div>
+      </div>
+      <div class="num">5300&nbsp;&nbsp;9000&nbsp;&nbsp;1337&nbsp;&nbsp;2026</div>
+      <div class="foot">
+        <span>VALID&nbsp;THRU&nbsp;∞/∞</span>
+        <div class="waves"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="links" id="links"></nav>
+<div class="hint" data-i18n="hint">наклоняй карту курсором или телефоном</div>
+
+<script>
+const T={
+ ru:{brand:"карта доступа",n1:"СЕРГЕЙ ПАРШИН",n2:"AI Specialist · Deep Learning",hint:"наклоняй карту курсором или телефоном",
+     labels:{phone:"Телефон",mail:"Почта",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}},
+ en:{brand:"access card",n1:"SERGEY PARSHIN",n2:"AI Specialist · Deep Learning",hint:"tilt the card with cursor or your phone",
+     labels:{phone:"Phone",mail:"Email",whatsapp:"WhatsApp",telegram:"Telegram",instagram:"Instagram",x:"Twitter",facebook:"Facebook",github:"GitHub",steam:"Steam"}}
+};
+const LINKS=[
+ {k:"phone",u:"tel:+79930001122"},{k:"mail",u:"mailto:info@sergeyparshin.ru"},
+ {k:"whatsapp",u:"https://wa.me/79930001122"},{k:"telegram",u:"https://t.me/buyholdsellrepeat"},
+ {k:"instagram",u:"https://instagram.com/sergeyparshin.ru"},{k:"x",u:"https://x.com/sergeyparshin"},
+ {k:"facebook",u:"https://facebook.com/sergeyparshin.ru"},{k:"github",u:"https://github.com/sergeyparshin"},
+ {k:"steam",u:"https://steamcommunity.com/id/sergeyparshin"}
+];
+let lang=localStorage.getItem('sp-lang')||(((navigator.language||'ru').startsWith('ru'))?'ru':'en');
+function render(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.innerHTML=T[lang][el.dataset.i18n]);
+  document.getElementById('bRu').classList.toggle('on',lang==='ru');
+  document.getElementById('bEn').classList.toggle('on',lang==='en');
+  const d=document.getElementById('links');d.innerHTML='';
+  LINKS.forEach(L=>{
+    const a=document.createElement('a');a.className='lk';a.href=L.u;a.textContent=T[lang].labels[L.k];
+    if(!L.u.startsWith('tel:')&&!L.u.startsWith('mailto:')){a.target='_blank';a.rel='noopener';}
+    d.appendChild(a);
+  });
+}
+document.getElementById('bRu').onclick=()=>{lang='ru';localStorage.setItem('sp-lang',lang);render();};
+document.getElementById('bEn').onclick=()=>{lang='en';localStorage.setItem('sp-lang',lang);render();};
+render();
+
+/* 3D tilt + holo glare */
+const card=document.getElementById('card');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let rx=0,ry=0,trx=0,try_=0;
+function setTilt(x,y){ // x,y in -1..1
+  trx=y*-14; try_=x*16;
+  card.style.setProperty('--gx',(x*50+50).toFixed(1));
+  card.style.setProperty('--gy',(y*50+50).toFixed(1));
+}
+if(!reduced){
+  addEventListener('pointermove',e=>{
+    setTilt(e.clientX/innerWidth*2-1, e.clientY/innerHeight*2-1);
+  });
+  addEventListener('deviceorientation',e=>{
+    if(e.gamma==null)return;
+    setTilt(Math.max(-1,Math.min(1,e.gamma/35)), Math.max(-1,Math.min(1,(e.beta-45)/35)));
+  });
+  (function loop(){
+    rx+=(trx-rx)*.12; ry+=(try_-ry)*.12;
+    card.style.transform=`rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+    requestAnimationFrame(loop);
+  })();
+}
+</script>
+<div class="vars" id="vars"></div>
+<script src="vars.js"></script>
+</body>
+</html>
