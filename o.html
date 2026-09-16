@@ -16,9 +16,9 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 /* ambient light that follows the model tilt */
 #glow{position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(46% 38% at calc(50% + var(--lx,0px)) calc(34% + var(--ly,0px)),rgba(96,140,255,.13),transparent 70%),
-    radial-gradient(30% 26% at calc(50% + var(--lx,0px)*.6) calc(30% + var(--ly,0px)*.6),color-mix(in srgb,var(--acc) 9%,transparent),transparent 70%),
-    radial-gradient(70% 55% at 50% 115%,rgba(96,140,255,.06),transparent 70%);
+    radial-gradient(48% 42% at calc(50% + var(--lx,0px)) calc(50% + var(--ly,0px)),rgba(124,58,237,.20),transparent 70%),
+    radial-gradient(32% 28% at calc(50% + var(--lx,0px)*.6) calc(50% + var(--ly,0px)*.6),rgba(139,92,246,.13),transparent 70%),
+    radial-gradient(70% 55% at 50% 115%,rgba(109,40,217,.08),transparent 70%);
   transition:opacity .6s}
 ::selection{background:var(--acc);color:#02211a}
 
@@ -60,9 +60,14 @@ body{background:radial-gradient(100% 80% at 50% 30%,#0a0f1e 0%,var(--bg) 75%);co
 .p-loc{grid-column:1/13;--c:var(--acc3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
   font-size:11px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
 .p-loc b{color:var(--acc3);font-weight:500}
+.panel .cap{transition:.25s;cursor:default}
+.rig.docked .panel .cap:hover{color:var(--c,var(--acc));text-shadow:0 0 14px color-mix(in srgb,var(--c,var(--acc)) 60%,transparent)}
 a.site-link{color:var(--dim);text-decoration:none;letter-spacing:.18em;text-transform:uppercase;font-size:inherit;transition:.25s;pointer-events:none}
 .rig.docked a.site-link{pointer-events:auto}
 a.site-link:hover{color:var(--acc);text-shadow:0 0 14px color-mix(in srgb,var(--acc) 55%,transparent)}
+.p-loc .loc-m{transition:.25s;cursor:default}
+.rig.docked .p-loc .loc-m:hover{color:var(--acc3);text-shadow:0 0 14px color-mix(in srgb,var(--acc3) 60%,transparent)}
+.rig.docked .p-loc .loc-m:hover b{color:var(--acc3)}
 
 /* github-style contribution graph */
 .cwrap{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start}
@@ -188,7 +193,7 @@ a.soc:hover svg{fill:var(--acc2)}
       </div>
 
       <div class="panel p-loc">
-        <span>Moscow · <b>UTC+3</b></span>
+        <span class="loc-m">Moscow · <b>UTC+3</b></span>
         <span><b>55.75°N 37.61°E</b></span>
         <a class="site-link" href="https://sergeyparshin.ru" target="_blank" rel="noopener">sergeyparshin.ru</a>
       </div>
@@ -205,10 +210,10 @@ const SOCS=[
  {k:"whatsapp",t:"WhatsApp",u:"https://wa.me/79930001122"},
  {k:"telegram",t:"Telegram",u:"https://t.me/buyholdsellrepeat"},
  {k:"instagram",t:"Instagram",u:"https://instagram.com/sergeyparshin.ru"},
- {k:"x",t:"Twitter",u:"https://x.com/sergeyparshin"},
+ {k:"x",t:"X",u:"https://x.com/sergeyparshin"},
  {k:"facebook",t:"Facebook",u:"https://facebook.com/sergeyparshin.ru"},
  {k:"github",t:"GitHub",u:"https://github.com/sergeyparshin"},
- {k:"max",t:"Max · +7 993 000-11-22",u:"https://max.ru"},
+ {k:"max",t:"Max",u:"https://max.ru"},
  {k:"vk",t:"VK",u:"https://vk.com/link.sergeyparshin"},
  {k:"steam",t:"Steam",u:"https://steamcommunity.com/id/sergeyparshin"},
  {k:"chess",t:"Chess",u:"https://www.chess.com/member/sergeyparshin"}
@@ -230,7 +235,7 @@ const ICONS={
 const sg=document.getElementById('socgrid');
 SOCS.forEach(L=>{
   const a=document.createElement('a');a.className='soc';a.href=L.u;a.target='_blank';a.rel='noopener';
-  if(L.k==='phone'||L.k==='mail'||L.k==='max')a.style.fontSize='11.5px';
+  if(L.k==='phone'||L.k==='mail')a.style.fontSize='11.5px';
   a.innerHTML=`${ICONS[L.k]}<span style="white-space:nowrap">${L.t}</span>`;
   sg.appendChild(a);
 });
