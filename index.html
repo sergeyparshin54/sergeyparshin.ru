@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>sergey@parshin:~$ — контакты</title>
+<title>@sergeyparshin:~$ — контакты</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -42,16 +42,14 @@ body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospac
 #log{white-space:pre-wrap;word-break:break-word;min-height:220px}
 #log .ok{color:var(--ph)} #log .warn{color:var(--amber)} #log .dim{color:var(--dim)}
 .prompt{color:var(--ph);font-weight:700}
+#live{margin:12px 0 6px;color:var(--ph-dim);font-size:10px;line-height:1.3;white-space:pre;overflow:hidden;text-shadow:0 0 8px rgba(61,255,143,.25)}
 .cursor{display:inline-block;width:.6em;height:1.15em;background:var(--ph);vertical-align:text-bottom;animation:blink 1s steps(1) infinite;box-shadow:0 0 8px var(--ph)}
 @keyframes blink{50%{opacity:0}}
 
 #card{display:none;margin-top:26px}
 .whois{border:1px solid var(--ph-dim);padding:clamp(16px,3vw,26px);position:relative}
 .whois::before{content:"// WHOAMI";position:absolute;top:-9px;left:14px;background:var(--bg);padding:0 8px;color:var(--ph);font-size:11px;letter-spacing:.3em}
-.name{color:var(--ph);font-weight:700;font-size:clamp(26px,6vw,52px);line-height:1.1;letter-spacing:.02em;text-shadow:0 0 18px rgba(61,255,143,.5)}
-.role{color:var(--dim);margin-top:6px}
-.role b{color:var(--amber);font-weight:500}
-.ascii{color:var(--ph-dim);font-size:10px;line-height:1.2;margin-top:14px;overflow:hidden;white-space:pre}
+.nasc{color:var(--ph);margin:0;white-space:pre;line-height:1.18;font-size:min(13px,calc((100vw - 110px)/31));text-shadow:0 0 14px rgba(61,255,143,.45);overflow:hidden}
 
 .cmds{margin-top:24px;display:grid;gap:2px}
 .cmds .h{color:var(--dim);margin:14px 0 8px;font-size:12px;letter-spacing:.2em}
@@ -71,7 +69,6 @@ a.cmd:hover .k{text-shadow:0 0 10px var(--ph)}
 @media (max-width:600px){
   a.cmd{grid-template-columns:26px 1fr auto}
   a.cmd .v{display:none}
-  .ascii{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -80,15 +77,28 @@ a.cmd:hover .k{text-shadow:0 0 10px var(--ph)}
 <div class="flick"></div><div class="scan"></div><div class="beam"></div><div class="vig"></div>
 
 <div class="term">
-  <div class="bar"><span class="c"></span><span class="c"></span><span class="c"></span><span class="t">sergey@parshin: ~/contacts — zsh</span></div>
+  <div class="bar"><span class="c"></span><span class="c"></span><span class="c"></span><span class="t">@sergeyparshin: ~/contacts — zsh</span></div>
   <div class="screen">
     <div id="log"></div>
 
     <div id="card">
       <div class="whois">
-        <div class="name" id="nm"></div>
-        <div class="role" id="rl"></div>
-        <div class="ascii" id="asc"></div>
+        <pre class="nasc" id="nm"> █████  ███████ ██████   █████  ███████ █     █
+█     █ █       █     █ █     █ █        █   █
+█       █       █     █ █       █         █ █
+ █████  █████   ██████  █  ████ █████      █
+      █ █       █   █   █     █ █          █
+█     █ █       █    █  █     █ █          █
+ █████  ███████ █     █  █████  ███████    █
+
+██████     █    ██████   █████  █     █ ███ █     █
+█     █   █ █   █     █ █     █ █     █  █  ██    █
+█     █  █   █  █     █ █       █     █  █  █ █   █
+██████  █     █ ██████   █████  ███████  █  █  █  █
+█       ███████ █   █         █ █     █  █  █   █ █
+█       █     █ █    █  █     █ █     █  █  █    ██
+█       █     █ █     █  █████  █     █ ███ █     █</pre>
+        
       </div>
       <div class="cmds" id="cmds"></div>
       <div class="langrow">
@@ -96,7 +106,9 @@ a.cmd:hover .k{text-shadow:0 0 10px var(--ph)}
         <span><button id="bRu">[ RU ]</button> <button id="bEn">[ EN ]</button></span>
       </div>
     </div>
-    <span id="tail"></span><span class="cursor" id="cur"></span>
+    <span id="tail"></span>
+    <pre id="live" aria-hidden="true"></pre>
+    <div><span class="prompt">@sergeyparshin:~$ </span><span class="cursor" id="cur"></span></div>
   </div>
 </div>
 
@@ -117,16 +129,10 @@ const LINKS=[
  {k:"chess",  v:"chess.com/member/sergeyparshin", u:"https://www.chess.com/member/sergeyparshin"}
 ];
 const T={
- ru:{boot:[["dim","[ BIOS ] neural-core v13.37 ... OK"],["dim","[ MEM  ] 640K ought to be enough ... OK"],["ok","[ NET  ] uplink established :: sergeyparshin.ru"],["warn","[ AI   ] loading deep-learning modules ██████████ 100%"],["ok","[ OK   ] identity verified — Sergey Parshin"],["", ""],["prompt","sergey@parshin:~$ whoami --contacts"]],
-     name:"СЕРГЕЙ ПАРШИН", role:"AI Specialist :: <b>нейросети · deep learning · engineering</b>",
-     head:"$ ls -la ./contacts  # 12 объектов найдено", foot:"© 2026 Сергей Паршин :: uptime ∞ :: Moscow UTC+3"},
- en:{boot:[["dim","[ BIOS ] neural-core v13.37 ... OK"],["dim","[ MEM  ] 640K ought to be enough ... OK"],["ok","[ NET  ] uplink established :: sergeyparshin.ru"],["warn","[ AI   ] loading deep-learning modules ██████████ 100%"],["ok","[ OK   ] identity verified — Sergey Parshin"],["", ""],["prompt","sergey@parshin:~$ whoami --contacts"]],
-     name:"SERGEY PARSHIN", role:"AI Specialist :: <b>neural nets · deep learning · engineering</b>",
-     head:"$ ls -la ./contacts  # 12 objects found", foot:"© 2026 Sergey Parshin :: uptime ∞ :: Moscow UTC+3"}
-};
-const ASCII={
- ru:"  ███████╗██████╗ \n  ██╔════╝██╔══██╗\n  ███████╗██████╔╝\n  ╚════██║██╔═══╝ \n  ███████║██║     \n  ╚══════╝╚═╝     ",
- en:"  ███████╗██████╗ \n  ██╔════╝██╔══██╗\n  ███████╗██████╔╝\n  ╚════██║██╔═══╝ \n  ███████║██║     \n  ╚══════╝╚═╝     "
+ ru:{boot:[["dim","[ BIOS ] neural-core v13.37 ... OK"],["dim","[ MEM  ] 640K ought to be enough ... OK"],["ok","[ NET  ] uplink established :: sergeyparshin.ru"],["warn","[ AI   ] loading deep-learning modules ██████████ 100%"],["ok","[ OK   ] identity verified — Sergey Parshin"],["", ""],["prompt","@sergeyparshin:~$ whoami --contacts"]],
+         head:"$ ls -la ./contacts  # 12 объектов найдено", foot:"© 2026 Сергей Паршин :: uptime ∞ :: Moscow UTC+3"},
+ en:{boot:[["dim","[ BIOS ] neural-core v13.37 ... OK"],["dim","[ MEM  ] 640K ought to be enough ... OK"],["ok","[ NET  ] uplink established :: sergeyparshin.ru"],["warn","[ AI   ] loading deep-learning modules ██████████ 100%"],["ok","[ OK   ] identity verified — Sergey Parshin"],["", ""],["prompt","@sergeyparshin:~$ whoami --contacts"]],
+         head:"$ ls -la ./contacts  # 12 objects found", foot:"© 2026 Sergey Parshin :: uptime ∞ :: Moscow UTC+3"}
 };
 let lang=localStorage.getItem('sp-lang')||(((navigator.language||'ru').startsWith('ru'))?'ru':'en');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -134,9 +140,6 @@ const log=document.getElementById('log'),card=document.getElementById('card'),ta
 
 function renderCard(){
   const t=T[lang];
-  document.getElementById('nm').textContent=t.name;
-  document.getElementById('rl').innerHTML=t.role;
-  document.getElementById('asc').textContent=ASCII[lang];
   document.getElementById('foot').textContent=t.foot;
   document.getElementById('bRu').classList.toggle('on',lang==='ru');
   document.getElementById('bEn').classList.toggle('on',lang==='en');
@@ -155,7 +158,7 @@ document.getElementById('bEn').onclick=()=>{lang='en';localStorage.setItem('sp-l
 
 async function boot(){
   renderCard();
-  if(reduced){card.style.display='block';tail.innerHTML='<span class="prompt">sergey@parshin:~$ </span>';return;}
+  if(reduced){card.style.display='block';tail.innerHTML='<span class="prompt">@sergeyparshin:~$ </span>tail -f /dev/neural';startLive();return;}
   for(const [cls,line] of T[lang].boot){
     const div=document.createElement('div');if(cls)div.className=cls;log.appendChild(div);
     for(let i=0;i<=line.length;i++){div.textContent=line.slice(0,i);await sleep(cls==='prompt'?34:8);}
@@ -164,9 +167,25 @@ async function boot(){
   await sleep(250);
   card.style.display='block';
   card.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:400,easing:'ease-out'});
-  tail.innerHTML='<span class="prompt">sergey@parshin:~$ </span>';
+  tail.innerHTML='<span class="prompt">@sergeyparshin:~$ </span>tail -f /dev/neural';
+  startLive();
 }
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function startLive(){
+  const live=document.getElementById('live');
+  if(!live||reduced)return;
+  const CH=' .:-=+*#%@',W=56,H=4;let t0=0;
+  setInterval(()=>{t0+=.32;let out='';
+    for(let y=0;y<H;y++){let row='';
+      for(let x=0;x<W;x++){
+        const v=Math.sin(x*.22+t0)+Math.sin((x+y)*.11-t0*.7)+Math.sin(y*.9+t0*.5);
+        row+=CH[Math.max(0,Math.min(CH.length-1,Math.floor((v+3)/6*CH.length)))];
+      }
+      out+=row+'\n';
+    }
+    live.textContent=out;
+  },110);
+}
 boot();
 </script>
 </body>
