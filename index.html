@@ -170,16 +170,16 @@ function startName(){
    H:["10001","10001","11111","10001","10001"],
    I:["11111","00100","00100","00100","11111"],
    N:["10001","11001","10101","10011","10001"]};
-  const RW=110,RH=5,NW=156,GAP=30,CY=NW+GAP;
+  const RW=110,RH=5,NW=222,GAP=30,CY=NW+GAP;
   const mask=Array.from({length:RH},()=>Array(NW).fill(false));
   function stamp(word,ox){
     for(const ch of word){const gl=F[ch];
       for(let y=0;y<5;y++)for(let x=0;x<5;x++)if(gl[y][x]==='1'){
-        mask[y][ox+2*x]=true;mask[y][ox+2*x+1]=true; /* stretch+bold */
+        mask[y][ox+3*x]=true;mask[y][ox+3*x+1]=true;mask[y][ox+3*x+2]=true; /* stretch x3, extra bold */
       }
-      ox+=12;}
+      ox+=17;}
   }
-  stamp('SERGEY',0);stamp('PARSHIN',74);
+  stamp('SERGEY',0);stamp('PARSHIN',105);
   const colHas=Array.from({length:NW},(_,x)=>mask.some(r=>r[x]));
   const nz=document.createElement('pre');nz.className='nz';
   const nm=document.createElement('pre');nm.className='nm';
