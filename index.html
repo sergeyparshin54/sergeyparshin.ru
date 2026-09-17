@@ -158,64 +158,36 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function startName(){
   const box=document.getElementById('nanim');
   if(!box)return;
-  /* 5x5 pixel font, stretched x2 horizontally */
-  const F={
-   S:["01110","10000","01110","00001","11110"],
-   E:["11111","10000","11110","10000","11111"],
-   R:["11110","10001","11110","10010","10001"],
-   G:["01110","10000","10111","10001","01111"],
-   Y:["10001","01010","00100","00100","00100"],
-   P:["11110","10001","11110","10000","10000"],
-   A:["01110","10001","11111","10001","10001"],
-   H:["10001","10001","11111","10001","10001"],
-   I:["11111","00100","00100","00100","11111"],
-   N:["10001","11001","10101","10011","10001"]};
-  const RW=110,RH=5,NW=222,GAP=30,CY=NW+GAP;
-  const mask=Array.from({length:RH},()=>Array(NW).fill(false));
-  function stamp(word,ox){
-    for(const ch of word){const gl=F[ch];
-      for(let y=0;y<5;y++)for(let x=0;x<5;x++)if(gl[y][x]==='1'){
-        mask[y][ox+3*x]=true;mask[y][ox+3*x+1]=true;mask[y][ox+3*x+2]=true; /* stretch x3, extra bold */
-      }
-      ox+=17;}
-  }
-  stamp('SERGEY',0);stamp('PARSHIN',105);
-  const colHas=Array.from({length:NW},(_,x)=>mask.some(r=>r[x]));
+  /* full-width ASCII plasma field */
+  const RW=110,RH=12;
   const nz=document.createElement('pre');nz.className='nz';
   const nm=document.createElement('pre');nm.className='nm';
   box.appendChild(nz);box.appendChild(nm);
-  if(reduced){
-    nm.textContent=mask.map(r=>r.map(c=>c?'█':' ').join('')).join('\n');return;
-  }
-  const CH=' .:-=+*#%@█',N=' .·';
-  let t0=0,glitchUntil=0,nextGlitch=performance.now()+3200;
-  setInterval(()=>{t0+=.3;
-    const now=performance.now();
-    if(now>nextGlitch){glitchUntil=now+300;nextGlitch=now+3800+Math.random()*2600;}
-    const glitch=now<glitchUntil;
-    const off=Math.floor(t0*1.7)%CY;          // ticker scroll offset
+  const LO=' .:-',HI='=+*#%@';
+  function frame(t0,glitch){
     let nOut='',lOut='';
     for(let y=0;y<RH;y++){
       for(let x=0;x<RW;x++){
-        const sc=(x+off)%CY;
-        const isL=sc<NW&&mask[y][sc];
-        if(isL){
-          if(glitch&&Math.random()<.28){lOut+=CH[2+Math.floor(Math.random()*(CH.length-2))];}
-          else{ /* solid letters, shimmer band sweeps along the screen */
-            const band=Math.abs(x-(((t0*9)%(RW+30))-15));
-            lOut+=band<2.5?'▓':'█';}
-          nOut+=' ';
-        }else{
-          const v=Math.sin(x*.21+t0)+Math.sin((x+y)*.13-t0*.6)+Math.sin(y*.7+t0*.4);
-          const th=(sc<NW&&colHas[sc])?99:1.85;   /* keep letter counters clean */
-          nOut+=v>th?N[2]:' ';
-          lOut+=' ';
-        }
+        const dx=x-RW/2,dy=(y-RH/2)*2;
+        const v=Math.sin(x*.21+t0)+Math.sin(y*.55-t0*.7)
+              +Math.sin((x+y)*.14+t0*.5)
+              +Math.sin(Math.sqrt(dx*dx+dy*dy)*.3-t0*1.3);   /* -4..4 */
+        const k=(v+4)/8;                                       /* 0..1 */
+        if(glitch&&Math.random()<.02){nOut+='@#%&'[Math.floor(Math.random()*4)];lOut+=' ';}
+        else if(k>.55){lOut+=HI[Math.min(HI.length-1,Math.floor((k-.55)/.45*HI.length))];nOut+=' ';}
+        else{nOut+=LO[Math.min(LO.length-1,Math.floor(k/.55*LO.length))];lOut+=' ';}
       }
       nOut+='\n';lOut+='\n';
     }
     nz.textContent=nOut;nm.textContent=lOut;
-  },90);
+  }
+  if(reduced){frame(0,false);return;}
+  let t0=0,glitchUntil=0,nextGlitch=performance.now()+4000;
+  setInterval(()=>{t0+=.12;
+    const now=performance.now();
+    if(now>nextGlitch){glitchUntil=now+220;nextGlitch=now+5000+Math.random()*4000;}
+    frame(t0,now<glitchUntil);
+  },80);
 }
 boot();
 </script>
