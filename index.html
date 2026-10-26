@@ -19,6 +19,7 @@ body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospac
 ::selection{background:var(--ph);color:#03180c}
 
 /* CRT layers */
+#matrix{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.07}
 .scan{position:fixed;inset:0;pointer-events:none;z-index:5;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);}
 .beam{position:fixed;left:0;right:0;height:120px;z-index:6;pointer-events:none;opacity:.06;
@@ -76,7 +77,7 @@ a.cmd:hover .k{text-shadow:0 0 10px var(--ph)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body><canvas id="matrix" aria-hidden="true"></canvas>
 <div class="flick"></div><div class="scan"></div><div class="beam"></div><div class="vig"></div>
 
 <div class="term">
@@ -190,6 +191,27 @@ function startName(){
     frame(t0,now<glitchUntil);
   },80);
 }
+
+/* subtle matrix rain background */
+(function(){
+  const cv=document.getElementById('matrix');if(!cv)return;
+  if(reduced)return;
+  const ctx=cv.getContext('2d');
+  const CH='アイウエオカキクケコサシスセソ0123456789ABCDEF';
+  let W,H,cols,drops,fs=16;
+  function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;
+    cols=Math.floor(W/fs);drops=Array.from({length:cols},()=>Math.random()*-H/fs);}
+  size();addEventListener('resize',size);
+  setInterval(()=>{
+    ctx.fillStyle='rgba(4,12,8,.12)';ctx.fillRect(0,0,W,H);
+    ctx.font=fs+"px 'JetBrains Mono',monospace";ctx.fillStyle='#3dff8f';
+    for(let i=0;i<cols;i++){
+      ctx.fillText(CH[Math.random()*CH.length|0],i*fs,drops[i]*fs);
+      if(drops[i]*fs>H&&Math.random()>.975)drops[i]=0;
+      drops[i]++;
+    }
+  },70);
+})();
 boot();
 </script>
 </body>
