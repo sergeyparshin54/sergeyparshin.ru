@@ -40,7 +40,7 @@ class SiteTest(unittest.TestCase):
     def test_landmarks_and_contacts(self):
         self.assertEqual(1, self.parser.main_count)
         self.assertEqual(1, self.parser.h1_count)
-        self.assertEqual(11, len(self.parser.links))
+        self.assertEqual(12, len(self.parser.links))
         for link in self.parser.links:
             self.assertTrue(link.startswith(("https://", "mailto:", "tel:")), link)
         self.assertIn("Pause motion", HTML)
@@ -56,7 +56,7 @@ class SiteTest(unittest.TestCase):
         person = json.loads(match.group(1))
         self.assertEqual("Sergey Parshin", person["name"])
         self.assertEqual("https://sergeyparshin.ru/", person["url"])
-        self.assertEqual(9, len(person["sameAs"]))
+        self.assertEqual(10, len(person["sameAs"]))
 
     def test_local_assets_and_no_third_party_font_request(self):
         self.assertNotIn("fonts.googleapis.com", HTML)
@@ -76,7 +76,7 @@ class ContactConsistencyTest(unittest.TestCase):
         js = re.findall(r'\{k:"(\w+)"', HTML)
         noscript = re.findall(r'\./open (\w+)</a>', HTML)
         self.assertEqual(js, noscript)
-        self.assertEqual(11, len(js))
+        self.assertEqual(12, len(js))
 
     def test_share_image_is_large_and_local(self):
         self.assertIn('content="summary_large_image"', HTML)
