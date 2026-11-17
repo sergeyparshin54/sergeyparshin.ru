@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      @font-face{font-family:JetBrains;src:url('assets/fonts/jetbrains-mono-latin.woff2') format('woff2');font-weight:300 700}
+      .bg{fill:#060a07}.frame{fill:#08130c;stroke:#1d7a4a;stroke-width:3}.green{fill:#3dff8f}.ink{fill:#c9e8d4}.dim{fill:#8ba896}.amber{fill:#ffc857}
+      .mono{font-family:JetBrains,monospace}.title{font-size:72px;font-weight:700}.subtitle{font-size:30px}.small{font-size:23px}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="630"/>
+  <rect class="frame" x="45" y="45" width="1110" height="540" rx="18"/>
+  <circle cx="82" cy="82" r="9" fill="#ff5f57"/><circle cx="110" cy="82" r="9" fill="#ffc857"/><circle cx="138" cy="82" r="9" fill="#3dff8f"/>
+  <text class="mono small dim" x="175" y="90">@sergeyparshin: ~/contacts — zsh</text>
+  <text class="mono small green" x="85" y="164">$ whoami --contacts</text>
+  <text class="mono title green" x="85" y="274">Sergey Parshin</text>
+  <text class="mono subtitle ink" x="85" y="340">AI specialist</text>
+  <text class="mono subtitle dim" x="85" y="405">Contacts and social networks</text>
+  <text class="mono small green" x="85" y="480">sergeyparshin.ru</text>
+  <text class="mono small dim" x="85" y="535">github.com/sergeyparshin</text>
+  <path d="M945 180h130v130H945z" fill="none" stroke="#3dff8f" stroke-width="4"/>
+  <path d="M970 215h80M970 245h80M970 275h45" stroke="#3dff8f" stroke-width="8"/>
+</svg>
