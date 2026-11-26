@@ -103,7 +103,7 @@ a.cmd:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
 <a class="cmd" href="tel:+79930001122">./open phone</a>
 <a class="cmd" href="mailto:info@sergeyparshin.ru">./open mail</a>
 <a class="cmd" href="https://wa.me/79930001122" target="_blank" rel="noopener">./open whatsapp</a>
-<a class="cmd" href="https://t.me/buyholdsellrepeat" target="_blank" rel="noopener">./open telegram</a>
+<a class="cmd" href="tg://resolve?phone=79930001122">./open telegram</a>
 <a class="cmd" href="https://vk.com/link.sergeyparshin" target="_blank" rel="noopener">./open vk</a>
 <a class="cmd" href="https://x.com/sergeyparshin" target="_blank" rel="noopener">./open x</a>
 <a class="cmd" href="https://instagram.com/sergeyparshin.ru" target="_blank" rel="noopener">./open instagram</a>
@@ -119,7 +119,7 @@ const LINKS=[
  {k:"phone",  v:"+7 993 000-11-22",          u:"tel:+79930001122"},
  {k:"mail",   v:"info@sergeyparshin.ru",     u:"mailto:info@sergeyparshin.ru"},
  {k:"whatsapp",v:"wa.me/79930001122",        u:"https://wa.me/79930001122"},
- {k:"telegram",v:"t.me/buyholdsellrepeat",   u:"https://t.me/buyholdsellrepeat"},
+ {k:"telegram",v:"t.me/buyholdsellrepeat",   u:"tg://resolve?phone=79930001122"},
  {k:"vk",     v:"vk.com/link.sergeyparshin", u:"https://vk.com/link.sergeyparshin"},
  {k:"x",      v:"x.com/sergeyparshin",       u:"https://x.com/sergeyparshin"},
  {k:"instagram",v:"instagram.com/sergeyparshin.ru", u:"https://www.instagram.com/sergeyparshin.ru"},
@@ -146,7 +146,7 @@ function renderCard(){
   const h=document.createElement('div');h.className='h';h.textContent=t.head;c.appendChild(h);
   LINKS.forEach((L,i)=>{
     const a=document.createElement('a');a.className='cmd';a.href=L.u;
-    if(!L.u.startsWith('tel:')&&!L.u.startsWith('mailto:')){a.target='_blank';a.rel='noopener';}
+    if(!L.u.startsWith('tel:')&&!L.u.startsWith('mailto:')&&!L.u.startsWith('tg:')){a.target='_blank';a.rel='noopener';}
     a.innerHTML=`<span class="n">${String(i+1).padStart(2,"0")}</span><span class="k">./open ${L.k}</span><span class="v">${L.v}</span><span class="go">→ exec</span>`;
     c.appendChild(a);
   });
