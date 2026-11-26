@@ -29,7 +29,7 @@
 <meta name="twitter:description" content="Contacts and social networks of Sergey Parshin, AI specialist.">
 <meta name="twitter:image" content="https://sergeyparshin.ru/assets/share.png">
 <link rel="preload" href="assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<noscript><style>#card{display:block}#motion-toggle,#cmds,.whois{display:none}</style></noscript>
+<noscript><style>#card{display:block}#cmds,.whois{display:none}</style></noscript>
 <style>
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:300 700;font-display:swap;src:url('assets/fonts/jetbrains-mono-latin.woff2') format('woff2')}
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:300 700;font-display:swap;src:url('assets/fonts/jetbrains-mono-cyrillic.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
@@ -71,13 +71,10 @@ body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospac
 a.cmd{display:grid;grid-template-columns:34px 150px 1fr auto;gap:10px;align-items:baseline;color:var(--ink);text-decoration:none;padding:8px 10px;border:1px solid transparent;transition:color .18s,background-color .18s,border-color .18s;min-height:44px}
 a.cmd .n{color:var(--dim)}a.cmd .k{color:var(--ph);font-weight:500}a.cmd .v{color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}a.cmd .go{color:var(--amber);opacity:0;transition:opacity .18s}
 a.cmd:hover{border-color:var(--ph-dim);background:rgba(61,255,143,.06)}a.cmd:hover .v{color:var(--ink)}a.cmd:hover .go{opacity:1}a.cmd:hover .k{text-shadow:0 0 10px var(--ph)}
-a.cmd:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+a.cmd:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
 .langrow{margin-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;color:var(--dim);font-size:.75rem}
-.langrow button{background:none;border:1px solid var(--dim);color:var(--ink);font:inherit;padding:8px 12px;cursor:pointer;min-height:44px}
-.langrow button:hover{border-color:var(--ph);color:var(--ph)}
-body.motion-paused .beam,body.motion-paused .flick,body.motion-paused .cursor{animation:none}
 @media (max-width:600px){a.cmd{grid-template-columns:26px 1fr auto}a.cmd .v{display:none}.bar .t{letter-spacing:0}}
-@media (pointer:coarse){a.cmd,.langrow button{min-height:48px}}
+@media (pointer:coarse){a.cmd{min-height:48px}}
 @media (prefers-reduced-motion:reduce){.beam,.flick,.cursor{animation:none}a.cmd,a.cmd .go{transition:none}}
 </style>
 </head>
@@ -95,7 +92,6 @@ body.motion-paused .beam,body.motion-paused .flick,body.motion-paused .cursor{an
       <nav class="cmds" id="cmds" aria-label="Contacts"></nav>
       <div class="langrow">
         <span id="foot"></span>
-        <button id="motion-toggle" type="button">Pause motion</button>
       </div>
     </section>
     <span id="tail"></span>
@@ -142,16 +138,6 @@ const T={
 const lang='en';
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const log=document.getElementById('log'),card=document.getElementById('card'),tail=document.getElementById('tail');
-const motionButton=document.getElementById('motion-toggle');
-let motionPaused=false,animationTimer=null;
-function setMotionPaused(paused){
-  motionPaused=paused;
-  document.body.classList.toggle('motion-paused',paused);
-  motionButton.textContent=paused?'Resume motion':'Pause motion';
-  if(animationTimer!==null){clearInterval(animationTimer);animationTimer=null;}
-  if(!paused)startName();
-}
-motionButton.addEventListener('click',()=>setMotionPaused(!motionPaused));
 function renderCard(){
   const t=T[lang];
   document.getElementById('foot').textContent=t.foot;
@@ -167,7 +153,7 @@ function renderCard(){
 }
 async function boot(){
   renderCard();
-  if(reduced){card.style.display='block';motionButton.hidden=true;startName();tail.innerHTML='';return;}
+  if(reduced){card.style.display='block';startName();tail.innerHTML='';return;}
   for(const [cls,line] of T[lang].boot){
     const div=document.createElement('div');if(cls)div.className=cls;log.appendChild(div);
     for(let i=0;i<=line.length;i++){div.textContent=line.slice(0,i);await sleep(cls==='prompt'?34:8);}
@@ -182,7 +168,7 @@ async function boot(){
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function startName(){
   const box=document.getElementById('nanim');
-  if(!box||motionPaused)return;
+  if(!box)return;
   const RW=110,RH=12;
   const nz=document.createElement('pre');nz.className='nz';
   const nm=document.createElement('pre');nm.className='nm';
@@ -206,7 +192,7 @@ function startName(){
   frame(0,false);
   if(reduced)return;
   let t0=0,glitchUntil=0,nextGlitch=performance.now()+4000;
-  animationTimer=setInterval(()=>{t0+=.12;
+  setInterval(()=>{t0+=.12;
     const now=performance.now();
     if(now>nextGlitch){glitchUntil=now+220;nextGlitch=now+5000+Math.random()*4000;}
     frame(t0,now<glitchUntil);
