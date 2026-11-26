@@ -43,7 +43,7 @@ class SiteTest(unittest.TestCase):
         self.assertEqual(12, len(self.parser.links))
         for link in self.parser.links:
             self.assertTrue(link.startswith(("https://", "mailto:", "tel:")), link)
-        self.assertIn("Pause motion", HTML)
+        self.assertNotIn("motion-toggle", HTML)
         self.assertIn("prefers-reduced-motion", HTML)
 
     def test_metadata_and_jsonld(self):
