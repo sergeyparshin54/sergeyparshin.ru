@@ -42,7 +42,7 @@ class SiteTest(unittest.TestCase):
         self.assertEqual(1, self.parser.h1_count)
         self.assertEqual(12, len(self.parser.links))
         for link in self.parser.links:
-            self.assertTrue(link.startswith(("https://", "mailto:", "tel:")), link)
+            self.assertTrue(link.startswith(("https://", "mailto:", "tel:", "tg:")), link)
         self.assertNotIn("motion-toggle", HTML)
         self.assertIn("prefers-reduced-motion", HTML)
 
